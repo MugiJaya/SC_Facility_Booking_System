@@ -1,4 +1,9 @@
-<?php  include('admin_process.php'); 
+<?php  include('admin_process.php');
+//redirecting to login page
+if(!isset($_SESSION['session_id']))
+{
+  header("location: ../login/login.php"); 
+}
 //fetch the record to update 
 if (isset($_GET['edit'])) {
     $customer_id = $_GET['edit'];
@@ -76,7 +81,7 @@ if (isset($_GET['edit'])) {
   </center>
   <br><br>
   <!-- ------------------ Customer ------------------ -->
-  <button class="dropdown-btn">Customer 
+  <button style="color: ivory; background-color: cornflowerblue;" class="dropdown-btn">Customer 
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
@@ -105,6 +110,7 @@ if (isset($_GET['edit'])) {
   </button>
   <div class="dropdown-container">
     <a href="admin_facility.php">Facility Information</a>
+    <a href="admin_add_facility.php">Add Facility</a>
   </div>
   <!-- ------------------ Equipment ------------------ -->
   <button class="dropdown-btn">Equipment 
@@ -112,6 +118,7 @@ if (isset($_GET['edit'])) {
   </button>
   <div class="dropdown-container">
     <a href="admin_equipment.php">Equipment Information</a>
+    <a href="admin_add_equipment.php">Add Equipment</a>
   </div>
   <!-- ------------------ Report ------------------ -->
   <button class="dropdown-btn">Report 
@@ -149,38 +156,33 @@ if (isset($_GET['edit'])) {
       </td>
       <td>
         <label>Customer Name:</label><br>
-        <input class="input2" type="text" name="customer_name" value="<?php echo $customer_name; ?>">
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="customer_name" value="<?php echo $customer_name; ?>" readonly>
       </td>     
       <td>
         <label>Date of Birth:</label><br>
-        <input class="input2" type="date" name="dob" value="<?php echo $dob; ?>">
+        <input style="background-color: #e6e6e6;" class="input2" type="date" name="dob" value="<?php echo $dob; ?>" readonly>
       </td> 
       <td>
         <label>Gender:</label><br>
-        <select class="input2" name="gender"> 
-          <option value="<?php echo $gender;?>" hidden><?php echo $gender; ?></option>
-          <option value="">--- No Value ---</option>
-          <option value="M">M</option>
-          <option value="F">F</option>
-        </select>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="gender" value="<?php echo $gender; ?>" readonly>
       </td> 
     </tr>
     <tr>
       <td>
         <label>Address:</label><br>
-        <input class="input2" type="text" name="address" value="<?php echo $address; ?>">
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="address" value="<?php echo $address; ?>" readonly>
       </td> 
       <td>
         <label>Contact No.:</label><br>
-        <input class="input2" type="text" name="contact_no" value="<?php echo $contact_no; ?>">
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="contact_no" value="<?php echo $contact_no; ?>" readonly>
       </td>  
       <td>
         <label>Email:</label><br>
-        <input class="input2" type="text" name="email" value="<?php echo $email; ?>">
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="email" value="<?php echo $email; ?>" readonly>
       </td>
       <td>
         <label>Password:</label><br>
-        <input class="input2" type="text" name="password" value="<?php echo $password; ?>">
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="password" value="<?php echo $password; ?>" readonly>
       </td>
     </tr>
     <tr>
@@ -196,7 +198,8 @@ if (isset($_GET['edit'])) {
       <td>
         <label>Admin ID:</label><br>
         <input style="background-color: #e6e6e6;" class="input2" type="text" name="admin_id" value="<?php echo $admin_id; ?>" readonly>
-      </td>  
+      </td>
+    </tr>
     <tr>
       <td colspan="4">
         <?php if ($update == true): ?>
@@ -214,7 +217,7 @@ if (isset($_GET['edit'])) {
 
 
 <?php
-$query = "select * from customer where verification_status = 'Declined' ";
+$query = "select * from customer where verification_status != 'Approved'";
 $search_result = filterTable($query);
 
 // function to connect and execute the query
@@ -270,6 +273,7 @@ function filterTable($query)
     <tr class="breakrow" onclick="location.href='admin_customer_approval.php?edit=<?php echo $row['customer_id']; ?>'">
       <td>
         <a title="Edit" href="admin_customer_approval.php?edit=<?php echo $row['customer_id']; ?>" class="edit_btn" >✏️</a>
+        <a title="Delete" href="#" class="del_btn" onclick="confirmDelete(<?php echo $row['customer_id']; ?>)">❌</a>
       </td>
       <td><?php echo '<img src="data:image/jpeg;base64,'.base64_encode($row['profile_picture'] ).'" height="150" width="150" class="img-thumnail" />' ?></td>
       <td><?php echo $row['customer_id'];?></td>
@@ -314,6 +318,16 @@ for (i = 0; i < dropdown.length; i++) {
 }
 
 
+/* ____DELETE BUTTON____ */
+function confirmDelete(customerId) {
+  let text = "Do you want to delete customer account with ID = " + customerId + "?\nClick OK to confirm.";
+  if (confirm(text)) {
+    location.href = "admin_process.php?delete2=" + customerId;
+  }
+}
+
+
+/* ____TABLE____ */
 $(document).ready(function() {
     $('#table2').DataTable( {
         initComplete: function () {

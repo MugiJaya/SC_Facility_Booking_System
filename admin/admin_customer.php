@@ -1,4 +1,9 @@
-<?php  include('admin_process.php'); 
+<?php  include('admin_process.php');
+//redirecting to login page
+if(!isset($_SESSION['session_id']))
+{
+  header("location: ../login/login.php"); 
+}
 //fetch the record to update 
 if (isset($_GET['edit'])) {
     $customer_id = $_GET['edit'];
@@ -76,7 +81,7 @@ if (isset($_GET['edit'])) {
   </center>
   <br><br>
   <!-- ------------------ Customer ------------------ -->
-  <button class="dropdown-btn">Customer 
+  <button style="color: ivory; background-color: cornflowerblue;" class="dropdown-btn">Customer 
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
@@ -105,6 +110,7 @@ if (isset($_GET['edit'])) {
   </button>
   <div class="dropdown-container">
     <a href="admin_facility.php">Facility Information</a>
+    <a href="admin_add_facility.php">Add Facility</a>
   </div>
   <!-- ------------------ Equipment ------------------ -->
   <button class="dropdown-btn">Equipment 
@@ -112,6 +118,7 @@ if (isset($_GET['edit'])) {
   </button>
   <div class="dropdown-container">
     <a href="admin_equipment.php">Equipment Information</a>
+    <a href="admin_add_equipment.php">Add Equipment</a>
   </div>
   <!-- ------------------ Report ------------------ -->
   <button class="dropdown-btn">Report 
@@ -196,7 +203,8 @@ if (isset($_GET['edit'])) {
       <td>
         <label>Admin ID:</label><br>
         <input style="background-color: #e6e6e6;" class="input2" type="text" name="admin_id" value="<?php echo $admin_id; ?>" readonly>
-      </td>  
+      </td>
+    </tr>  
     <tr>
       <td colspan="4">
         <?php if ($update == true): ?>
@@ -314,6 +322,7 @@ for (i = 0; i < dropdown.length; i++) {
 }
 
 
+/* ____TABLE____ */
 $(document).ready(function() {
     $('#table2').DataTable( {
         initComplete: function () {

@@ -83,19 +83,19 @@ table#table1, table#table1 td, table#table1 th {
 table#table1 {
   border-collapse: collapse;  
   width: 100%;
-  table-layout:fixed;
+  table-layout:relative;
 }
 
 table#table1 td, table#table1 tr{
-  padding: 1px;
-  font: 11px arial, sans-serif;
-  font-weight: bold;
+  padding: 5px;
+  font: 12px arial, sans-serif;
+  font-weight: bold
 }
 
 
 /*--------------TABLE 2--------------*/
 table#table2, table#table2 td {  
-  border: 1.5px solid #2E2525;
+  border: 2px solid #5F9EA0;
   text-align: left;
 }
 
@@ -106,135 +106,58 @@ table#table2 {
 }
 
 table#table2 th, table#table2 td, table#table2 tr{
-  padding: 2px 12px;
+  padding: 5px;
   font: 10px arial, sans-serif;
 }
 
 table#table2 th {
-  background-color: #2E2525;
+  position: sticky;
+  background-color: #5F9EA0;
   color: white;
-  top: -1px;
+  top: -2px;
   z-index: 2;
+  text-align: center-;
 }
 
-tfoot input {
-  width: 100%;
-  min-width: 50px;
-  height: 15px;
-  font-size: 10px;
-  box-sizing: border-box;
+.breakrow:hover {
+    background: #F5F5F5;
 }
-
-tfoot {
-  display: table-header-group;
-}
-
 
 /* ---------------------TABLE-------------------------*/
 
+.input2 {
+    font-size: 12px;
+    width: 50%;
+    border-width: 0.5px;
+    border-color:  black;
+}
 
 .btn {
-  padding: 4px;
-  font-size: 12px;
-  color: white;
-  background: #2E8B57;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.btn2 {
-  padding: 4px;
-  font-size: 12px;
-  color: white;
-  background: #800000;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.btn3 {
-  padding: 5px;
-  font-size: 11px;
-  height: 35px;
-  color: white;
-  background: darkslategray;
-  border: solid 1px;
-  border-color: #264040;
-  border-radius: 3px;
-  cursor: pointer;
+    padding: 10px 24%;
+    font-size: 12px;
+    color: white;
+    background: #2E8B57;
+    border: none;
+    border-radius: 3px;
 }
 
 .edit_btn {
-  text-decoration: none;
-  padding: 4px 4px;
-  background: #2E8B57;
-  color: white;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.details_btn {
-  text-decoration: none;
-  padding: 4px 4px;
-  background: orange;
-  color: white;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.del_btn {
-  text-decoration: none;
-  padding: 4px 4px;
-  color: white;
-  border-radius: 3px;
-  background: #800000;
-  cursor: pointer;
-}
-
-.link2{
-  padding: 10px 5px;
-  font-size: 11px;
-  color: white;
-  background: darkslategray;
-  border: solid 1px;
-  border-color: #264040;
-  border-radius: 3px;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.input {
-  font-size: 15px;
-  width: 60%;
-  border-width: 0.5px;
-  border-color:  black;
-}
-
-.input2 {
-  font-size: 10px;
-  width: 90%;
-  border-width: 0.5px;
-  border-color:  black;
-}
-
-.stars{
-  font-size: 10px;
-  padding: 0.5px;
-  width: 90%;
-  border-width: 0.5px;
-  border-color:  black;
+    text-decoration: none;
+    padding: 2px 5px;
+    background: #2E8B57;
+    color: white;
+    border-radius: 3px;
 }
 
 .msg {
-  margin: 5px auto; 
-  padding: 2px; 
-  border-radius: 5px; 
-  color: #3c763d; 
-  background: #dff0d8; 
-  border: 1px solid #3c763d;
-  width: 50%;
-  text-align: center;
+    margin: 5px auto; 
+    padding: 2px; 
+    border-radius: 5px; 
+    color: #3c763d; 
+    background: #dff0d8; 
+    border: 1px solid #3c763d;
+    width: 50%;
+    text-align: center;
 }
 
 div.input-group{
