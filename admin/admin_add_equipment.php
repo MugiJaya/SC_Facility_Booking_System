@@ -6,20 +6,19 @@ if(!isset($_SESSION['session_id']))
 }
 //fetch the record to update 
 if (isset($_GET['edit'])) {
-    $facility_id = $_GET['edit'];
+    $equipment_id = $_GET['edit'];
     $update = true;
-    $record = mysqli_query($conn, "select * from facility where facility_id = $facility_id");
+    $record = mysqli_query($conn, "select * from equipment where equipment_id = $equipment_id");
     if (count($record) == 1 ) 
     {
       $n = mysqli_fetch_array($record);
 
-      $facility_name = $n['facility_name'];
-      $facility_type = $n['facility_type'];
-      $facility_capacity = $n['facility_capacity'];
-      $for_events = $n['for_events'];
+      $equipment_name = $n['equipment_name'];
+      $eqiupment_type = $n['eqiupment_type'];
+      $quantity = $n['quantity'];
       $description = $n['description'];
-      $price = $n['price'];
       $file = $n['file'];
+      $facility_id = $n['facility_id'];
     }
   }
 ?>
@@ -28,7 +27,7 @@ if (isset($_GET['edit'])) {
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin / Add Facility</title>
+  <title>Admin / Add Equipment</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="admin_css_2.css">
@@ -93,21 +92,21 @@ if (isset($_GET['edit'])) {
     <a href="admin_event_approval.php">Event Reservation Approval</a>
   </div>
   <!-- ------------------ Facility ------------------ -->
-  <button style="color: ivory; background-color: cornflowerblue;" class="dropdown-btn">Facility 
+  <button class="dropdown-btn">Facility 
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
     <a href="admin_facility.php">Facility Information</a>
-    <a class="active" href="admin_add_facility.php">Add Facility</a>
+    <a href="admin_add_facility.php">Add Facility</a>
   </div>
   <!-- ------------------ Equipment ------------------ -->
-  <button class="dropdown-btn">Equipment 
+  <button style="color: ivory; background-color: cornflowerblue;" class="dropdown-btn">Equipment 
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
     <a href="admin_equipment.php">Equipment Information</a>
     <a href="admin_equipment_reservation.php">Reservation Information</a>
-    <a href="admin_add_equipment.php">Add Equipment</a>
+    <a class="active" href="admin_add_equipment.php">Add Equipment</a>
   </div>
   <!-- ------------------ Report ------------------ -->
   <button class="dropdown-btn">Report 
@@ -133,7 +132,7 @@ if (isset($_GET['edit'])) {
   </div>
 <?php endif ?>
 
-<h2 style="margin-left: 40px;">Add A New Facility</h2>
+<h2 style="margin-left: 40px;">Add New Equipment</h2>
 
 
 <div class="input-group">
@@ -142,33 +141,27 @@ if (isset($_GET['edit'])) {
   <form method="post" action="admin_process.php" enctype="multipart/form-data">
     <tr>
       <td>
-        <!-- Facility ID -->
-        <input type="hidden" name="facility_id" value="<?php echo $facility_id; ?>">
+        <!-- Equipment ID -->
+        <input type="hidden" name="equipment_id" value="<?php echo $equipment_id; ?>">
       </td>
     </tr>
     <tr>
       <td>
-        <label>Facility Name:</label><br>
-        <input class="input2" type="text" name="facility_name" value="<?php echo $facility_name; ?>">
+        <label>Equipment Name:</label><br>
+        <input class="input2" type="text" name="equipment_name" value="<?php echo $equipment_name; ?>">
       </td>
     </tr>
     <tr>     
       <td>
-        <label>Facility Type:</label><br>
-        <input class="input2" type="text" name="facility_type" value="<?php echo $facility_type; ?>">
+        <label>Equipment Type:</label><br>
+        <input class="input2" type="text" name="eqiupment_type" value="<?php echo $eqiupment_type; ?>">
       </td>
     </tr>
     <tr>
       <td>
-        <label>Facility Capacity:</label><br>
-        <input class="input2" type="text" name="facility_capacity" value="<?php echo $facility_capacity; ?>">
+        <label>Quantity:</label><br>
+        <input class="input2" type="text" name="quantity" value="<?php echo $quantity; ?>">
       </td> 
-    </tr>
-    <tr>
-      <td>
-        <label>For Events?:</label><br>
-        <input class="input2" type="text" name="for_events" value="<?php echo $for_events; ?>">
-      </td>
     </tr>
     <tr>
       <td>
@@ -176,21 +169,32 @@ if (isset($_GET['edit'])) {
         <textarea class="input2" name="description" rows="5"><?php echo $description; ?></textarea>
       </td>
     </tr>
-    <tr>  
-      <td>
-        <label>Price:</label><br>
-        <input class="input2" type="text" name="price" value="<?php echo $price; ?>">
-      </td>
-    </tr>
     <tr>
       <td>
-        <label>Facility Image:</label><br>
+        <label>Equipment Image:</label><br>
         <input class="input2" type="file" name="image" id="image" value="<?php echo $file; ?>">
       </td>
     </tr>  
+    <tr>  
+      <td>
+        <label>Facility:</label><br>
+        <select class="input2" name="facility_id">
+        <option value="">--- Select ---</option> 
+        <?php 
+        $sql = mysqli_query($conn, "select * from facility");
+        while ($facility_id = $sql->fetch_assoc())
+        {
+        ?>
+          <option value="<?php echo $facility_id['facility_id'];?>"><?php echo $facility_id['facility_name'];?></option>
+        <?php
+        }
+        ?>
+        </select>
+      </td>
+    </tr>
     <tr>
       <td colspan="3">
-        <button class="btn" type="submit" name="save7" id="save7" >Save</button>
+        <button class="btn" type="submit" name="save8" id="save8" >Save</button>
       </td> 
     </tr>
   </form>

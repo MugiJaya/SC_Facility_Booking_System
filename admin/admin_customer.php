@@ -103,6 +103,8 @@ if (isset($_GET['edit'])) {
   <div class="dropdown-container">
     <a href="admin_booking.php">Booking Information</a>
     <a href="admin_booking_approval.php">Booking Approval</a>
+    <a href="admin_event.php">Event Reservation Information</a>
+    <a href="admin_event_approval.php">Event Reservation Approval</a>
   </div>
   <!-- ------------------ Facility ------------------ -->
   <button class="dropdown-btn">Facility 
@@ -118,6 +120,7 @@ if (isset($_GET['edit'])) {
   </button>
   <div class="dropdown-container">
     <a href="admin_equipment.php">Equipment Information</a>
+    <a href="admin_equipment_reservation.php">Reservation Information</a>
     <a href="admin_add_equipment.php">Add Equipment</a>
   </div>
   <!-- ------------------ Report ------------------ -->
