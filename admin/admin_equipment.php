@@ -196,7 +196,7 @@ if (isset($_GET['edit'])) {
     <tr>
       <td colspan="4">
         <?php if ($update == true): ?>
-        <button class="btn" type="submit" name="update8" >Update</button>
+        <button class="btn" type="submit" name="update10" >Update</button>
         <?php else: ?>
         <p></p>
         <?php endif ?>
@@ -303,7 +303,7 @@ for (i = 0; i < dropdown.length; i++) {
 function confirmDelete(equipmentId) {
   let text = "Do you want to delete equipment with ID = " + equipmentId + "?\nClick OK to confirm.";
   if (confirm(text)) {
-    location.href = "admin_process.php?delete9=" + equipmentId;
+    location.href = "admin_process.php?delete10=" + equipmentId;
   }
 }
 

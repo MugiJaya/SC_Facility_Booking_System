@@ -190,7 +190,7 @@ if (isset($_GET['edit'])) {
     </tr>  
     <tr>
       <td colspan="3">
-        <button class="btn" type="submit" name="save7" id="save7" >Save</button>
+        <button class="btn" type="submit" name="save7" id="save9" >Save</button>
       </td> 
     </tr>
   </form>

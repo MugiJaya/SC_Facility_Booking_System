@@ -197,7 +197,7 @@ if (isset($_GET['delete4']))
 }
 
 
-/*------------------------------------------------------------COMPANY------------------------------------------------------------*/
+/*------------------------------------------------------------BOOKING------------------------------------------------------------*/
 
 
 if (isset($_POST['update5'])) 
@@ -227,12 +227,37 @@ if (isset($_POST['update5']))
 }
 
 
+if (isset($_POST['update6'])) 
+{
+	$booking_id = $_POST['booking_id'];
+	$reservation_date = $_POST['reservation_date'];
+    $reservation_time = $_POST['reservation_time'];
+    $reservation_purpose = $_POST['reservation_purpose'];
+    $approval_status = $_POST['approval_status'];
+    $rating = $_POST['rating'];
+    $feedback = $_POST['feedback'];
+    $customer_id = $_POST['customer_id'];
+    $customer_name = $_POST['customer_name'];
+    $facility_id = $_POST['facility_id'];
+    $facility_name = $_POST['facility_name'];
+    $payment_id = $_POST['payment_id'];
+    $payment_amount = $_POST['payment_amount'];
+    $payment_date = $_POST['payment_date'];
+    $payment_time = $_POST['payment_time'];
+	
+	mysqli_query($conn, "update booking set reservation_date='$reservation_date', reservation_time='$reservation_time', reservation_purpose='$reservation_purpose', approval_status='$approval_status' where booking_id=$booking_id");
+
+	$_SESSION['msg'] = "Updated!"; 
+	header('location: admin_booking_approval.php');
+}
+
+
 
 
 /*------------------------------------------------------------FACILITY------------------------------------------------------------*/
 
 
-if (isset($_POST['save7'])) 
+if (isset($_POST['save9'])) 
 {
 	$facility_name = $_POST['facility_name'];
 	$facility_type = $_POST['facility_type'];
@@ -249,27 +274,45 @@ if (isset($_POST['save7']))
 }
 
 
-if (isset($_POST['update7'])) 
+if (isset($_POST['update9'])) 
 {
-	$facility_id = $_POST['facility_id'];
-	$facility_name = $_POST['facility_name'];
-	$facility_type = $_POST['facility_type'];
-	$facility_capacity = $_POST['facility_capacity'];
-	$for_events = $_POST['for_events'];
-	$description = $_POST['description'];
-	$price = $_POST['price'];
-	$file = addslashes(file_get_contents($_FILES["image"]["tmp_name"]));
+	if(empty($_FILES['image']['name']))
+	{
+		$facility_id = $_POST['facility_id'];
+		$facility_name = $_POST['facility_name'];
+		$facility_type = $_POST['facility_type'];
+		$facility_capacity = $_POST['facility_capacity'];
+		$for_events = $_POST['for_events'];
+		$description = $_POST['description'];
+		$price = $_POST['price'];
 	
-	mysqli_query($conn, "update facility set facility_name='$facility_name', facility_type='$facility_type', facility_capacity='$facility_capacity', for_events='$for_events', description='$description', price='$price', facility_image='$file' where facility_id=$facility_id");
+		mysqli_query($conn, "update facility set facility_name='$facility_name', facility_type='$facility_type', facility_capacity='$facility_capacity', for_events='$for_events', description='$description', price='$price' where facility_id=$facility_id");
 
-	$_SESSION['msg'] = "Updated!"; 
-	header('location: admin_facility.php');
+		$_SESSION['msg'] = "Updated!"; 
+		header('location: admin_facility.php');
+	}
+	else
+	{
+		$facility_id = $_POST['facility_id'];
+		$facility_name = $_POST['facility_name'];
+		$facility_type = $_POST['facility_type'];
+		$facility_capacity = $_POST['facility_capacity'];
+		$for_events = $_POST['for_events'];
+		$description = $_POST['description'];
+		$price = $_POST['price'];
+		$file = addslashes(file_get_contents($_FILES["image"]["tmp_name"]));
+	
+		mysqli_query($conn, "update facility set facility_name='$facility_name', facility_type='$facility_type', facility_capacity='$facility_capacity', for_events='$for_events', description='$description', price='$price', facility_image='$file' where facility_id=$facility_id");
+
+		$_SESSION['msg'] = "Updated!"; 
+		header('location: admin_facility.php');
+	}
 }
 
 
-if (isset($_GET['delete7'])) 
+if (isset($_GET['delete9'])) 
 {
-	$facility_id = $_GET['delete7'];
+	$facility_id = $_GET['delete9'];
 	mysqli_query($conn, "delete from facility where facility_id = $facility_id");
 	$_SESSION['msg'] = "Deleted!"; 
 	header('location: admin_facility.php');
@@ -279,7 +322,7 @@ if (isset($_GET['delete7']))
 /*------------------------------------------------------------EQUIPMENT------------------------------------------------------------*/
 
 
-if (isset($_POST['save8'])) 
+if (isset($_POST['save10'])) 
 {
 	$equipment_name = $_POST['equipment_name'];
 	$eqiupment_type = $_POST['eqiupment_type'];
@@ -295,25 +338,42 @@ if (isset($_POST['save8']))
 }
 
 
-if (isset($_POST['update8'])) 
+if (isset($_POST['update10'])) 
 {
-	$equipment_id = $_POST['equipment_id'];
-	$equipment_name = $_POST['equipment_name'];
-	$eqiupment_type = $_POST['eqiupment_type'];
-	$quantity = $_POST['quantity'];
-	$description = $_POST['description'];
-	$file = addslashes(file_get_contents($_FILES["image"]["tmp_name"]));
-	$facility_id = $_POST['facility_id'];
+	if(empty($_FILES['image']['name']))
+	{
+		$equipment_id = $_POST['equipment_id'];
+		$equipment_name = $_POST['equipment_name'];
+		$eqiupment_type = $_POST['eqiupment_type'];
+		$quantity = $_POST['quantity'];
+		$description = $_POST['description'];
+		$facility_id = $_POST['facility_id'];
 	
-	mysqli_query($conn, "update equipment set equipment_name='$equipment_name', eqiupment_type='$eqiupment_type', quantity='$quantity', description='$description', equipment_image='$file', facility_id='$facility_id' where equipment_id=$equipment_id");
+		mysqli_query($conn, "update equipment set equipment_name='$equipment_name', eqiupment_type='$eqiupment_type', quantity='$quantity', description='$description', facility_id='$facility_id' where equipment_id=$equipment_id");
 
-	$_SESSION['msg'] = "Updated!"; 
-	header('location: admin_equipment.php');
+		$_SESSION['msg'] = "Updated!"; 
+		header('location: admin_equipment.php');
+	}
+	else
+	{
+		$equipment_id = $_POST['equipment_id'];
+		$equipment_name = $_POST['equipment_name'];
+		$eqiupment_type = $_POST['eqiupment_type'];
+		$quantity = $_POST['quantity'];
+		$description = $_POST['description'];
+		$file = addslashes(file_get_contents($_FILES["image"]["tmp_name"]));
+		$facility_id = $_POST['facility_id'];
+	
+		mysqli_query($conn, "update equipment set equipment_name='$equipment_name', eqiupment_type='$eqiupment_type', quantity='$quantity', description='$description', equipment_image='$file', facility_id='$facility_id' where equipment_id=$equipment_id");
+
+		$_SESSION['msg'] = "Updated!"; 
+		header('location: admin_equipment.php');
+	}
 }
 
-if (isset($_GET['delete9'])) 
+if (isset($_GET['delete10'])) 
 {
-	$equipment_id = $_GET['delete9'];
+	$equipment_id = $_GET['delete10'];
 	mysqli_query($conn, "delete from equipment where equipment_id = $equipment_id");
 	$_SESSION['msg'] = "Deleted!"; 
 	header('location: admin_equipment.php');

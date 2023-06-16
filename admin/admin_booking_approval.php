@@ -6,20 +6,27 @@ if(!isset($_SESSION['session_id']))
 }
 //fetch the record to update 
 if (isset($_GET['edit'])) {
-    $facility_id = $_GET['edit'];
+    $booking_id = $_GET['edit'];
     $update = true;
-    $record = mysqli_query($conn, "select * from facility where facility_id = $facility_id");
+    $record = mysqli_query($conn, "select bk.*, cus.*, fac.*, pay.* from booking bk inner join customer cus on bk.customer_id = cus.customer_id inner join facility fac on bk.facility_id = fac.facility_id left join payment pay on bk.payment_id = pay.payment_id where booking_id = $booking_id");
     if (count($record) == 1 ) 
     {
       $n = mysqli_fetch_array($record);
 
+      $reservation_date = $n['reservation_date'];
+      $reservation_time = $n['reservation_time'];
+      $reservation_purpose = $n['reservation_purpose'];
+      $approval_status = $n['approval_status'];
+      $rating = $n['rating'];
+      $feedback = $n['feedback'];
+      $customer_id = $n['customer_id'];
+      $customer_name = $n['customer_name'];
+      $facility_id = $n['facility_id'];
       $facility_name = $n['facility_name'];
-      $facility_type = $n['facility_type'];
-      $facility_capacity = $n['facility_capacity'];
-      $for_events = $n['for_events'];
-      $description = $n['description'];
-      $price = $n['price'];
-      $file = $n['file'];
+      $payment_id = $n['payment_id'];
+      $payment_amount = $n['payment_amount'];
+      $payment_date = $n['payment_date'];
+      $payment_time = $n['payment_time'];
     }
   }
 ?>
@@ -28,7 +35,7 @@ if (isset($_GET['edit'])) {
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin / Facility</title>
+  <title>Admin / Booking Approval</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="admin_css_1.css">
@@ -45,7 +52,7 @@ if (isset($_GET['edit'])) {
       position: fixed;
       left: 0;
       right: 0;
-      height: 25%;    
+      height: 30%;    
       top: 0;
       margin-left: 150px;
       background-color: lavender;
@@ -56,7 +63,7 @@ if (isset($_GET['edit'])) {
       position: fixed;
       left: 0;
       right: 0;
-      height: 75%;
+      height: 70%;
       bottom: 0;
       margin-left: 150px;
       background-color: lavender;
@@ -95,21 +102,21 @@ if (isset($_GET['edit'])) {
     <a href="admin_company_approval.php">Account Approval</a>
   </div>
   <!-- ------------------ Booking ------------------ -->
-  <button class="dropdown-btn">Booking 
+  <button style="color: ivory; background-color: cornflowerblue;" class="dropdown-btn">Booking 
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
     <a href="admin_booking.php">Booking Information</a>
-    <a href="admin_booking_approval.php">Booking Approval</a>
+    <a class="active" href="admin_booking_approval.php">Booking Approval</a>
     <a href="admin_event.php">Event Reservation Information</a>
     <a href="admin_event_approval.php">Event Reservation Approval</a>
   </div>
   <!-- ------------------ Facility ------------------ -->
-  <button style="color: ivory; background-color: cornflowerblue;" class="dropdown-btn">Facility 
+  <button class="dropdown-btn">Facility 
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
-    <a class="active" href="admin_facility.php">Facility Information</a>
+    <a href="admin_facility.php">Facility Information</a>
     <a href="admin_add_facility.php">Add Facility</a>
   </div>
   <!-- ------------------ Equipment ------------------ -->
@@ -152,44 +159,55 @@ if (isset($_GET['edit'])) {
   <form method="post" action="admin_process.php" enctype="multipart/form-data">
     <tr>
       <td>
+        <label>Booking ID:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="booking_id" value="<?php echo $booking_id; ?>" readonly>
+      </td>
+      <td>
+        <label>Reservation Date:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="reservation_date" value="<?php echo $reservation_date; ?>" readonly>
+      </td>     
+      <td>
+        <label>Reservation Time:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="reservation_time" value="<?php echo $reservation_time; ?>" readonly>
+      </td> 
+      <td>
+        <label>Reservation Purpose:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="reservation_purpose" value="<?php echo $reservation_purpose; ?>" readonly>
+      </td> 
+    </tr>
+    <tr>
+      <td>
+        <label>Approval Status:</label><br>
+        <select class="input2" name="approval_status"> 
+          <option value="<?php echo $approval_status;?>" hidden><?php echo $approval_status; ?></option>
+          <option value="">--- No Value ---</option>
+          <option value="Approved">Approved</option>
+          <option value="Declined">Declined</option>
+        </select>
+      </td> 
+    </tr>
+    <tr>
+      <td>
+        <label>Customer ID:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="customer_id" value="<?php echo $customer_id; ?>" readonly>
+      </td>
+      <td>
+        <label>Customer Name:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="customer_name" value="<?php echo $customer_name; ?>" readonly>
+      </td> 
+      <td>
         <label>Facility ID:</label><br>
         <input style="background-color: #e6e6e6;" class="input2" type="text" name="facility_id" value="<?php echo $facility_id; ?>" readonly>
       </td>
       <td>
         <label>Facility Name:</label><br>
-        <input class="input2" type="text" name="facility_name" value="<?php echo $facility_name; ?>">
-      </td>     
-      <td>
-        <label>Facility Type:</label><br>
-        <input class="input2" type="text" name="facility_type" value="<?php echo $facility_type; ?>">
-      </td> 
-      <td>
-        <label>Facility Capacity:</label><br>
-        <input class="input2" type="text" name="facility_capacity" value="<?php echo $facility_capacity; ?>">
-      </td> 
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="facility_name" value="<?php echo $facility_name; ?>" readonly>
+      </td>
     </tr>
-    <tr>
-      <td>
-        <label>For Events?:</label><br>
-        <input class="input2" type="text" name="for_events" value="<?php echo $for_events; ?>">
-      </td> 
-      <td>
-        <label>Description:</label><br>
-        <input class="input2" type="text" name="description" value="<?php echo $description; ?>">
-      </td>  
-      <td>
-        <label>Price:</label><br>
-        <input class="input2" type="text" name="price" value="<?php echo $price; ?>">
-      </td>
-      <td>
-        <label>Facility Image:</label><br>
-        <input class="input2" type="file" name="image" id="image" value="<?php echo $file; ?>">
-      </td>
-    </tr>  
     <tr>
       <td colspan="4">
         <?php if ($update == true): ?>
-        <button class="btn" type="submit" name="update9" >Update</button>
+        <button class="btn" type="submit" name="update6" >Update</button>
         <?php else: ?>
         <p></p>
         <?php endif ?>
@@ -203,7 +221,7 @@ if (isset($_GET['edit'])) {
 
 
 <?php
-$query = "select * from facility";
+$query = "select bk.*, cus.*, fac.*, pay.* from booking bk inner join customer cus on bk.customer_id = cus.customer_id inner join facility fac on bk.facility_id = fac.facility_id left join payment pay on bk.payment_id = pay.payment_id where bk.approval_status != 'Approved'";
 $search_result = filterTable($query);
 
 // function to connect and execute the query
@@ -225,44 +243,46 @@ function filterTable($query)
   <thead>
     <tr>
       <th>#</th>
-      <th>Facility Image</th>
+      <th>Booking ID</th>
+      <th>Reservation Date</th>
+      <th>Reservation Time</th>
+      <th>Reservation Purpose</th>
+      <th>Approval Status</th>
+      <th>Customer ID</th>
+      <th>Customer Name</th>
       <th>Facility ID</th>
       <th>Facility Name</th>
-      <th>Facility Type</th>
-      <th>Facility Capacity</th>
-      <th>For Events?</th>
-      <th>Description</th>
-      <th>Price</th>
     </tr>
   </thead>
   <tfoot>
     <tr>
       <th id='no'>#</th>
-      <th id='no'>Facility Image</th>
+      <th id='in'>Booking ID</th>
+      <th id='in'>Reservation Date</th>
+      <th id='in'>Reservation Time</th>
+      <th id='in'>Reservation Purpose</th>
+      <th id='in'>Approval Status</th>
+      <th id='in'>Customer ID</th>
+      <th id='in'>Customer Name</th>
       <th id='in'>Facility ID</th>
       <th id='in'>Facility Name</th>
-      <th id='in'>Facility Type</th>
-      <th id='in'>Facility Capacity</th>
-      <th id='in'>For Events?</th>
-      <th id='in'>Description</th>
-      <th id='in'>Price</th>
     </tr>
   </tfoot>
   <tbody>
     <?php while($row = mysqli_fetch_array($search_result)):?>    
-    <tr class="breakrow" onclick="location.href='admin_facility.php?edit=<?php echo $row['facility_id']; ?>'">
+    <tr class="breakrow" onclick="location.href='admin_booking_approval.php?edit=<?php echo $row['booking_id']; ?>'">
       <td>
-        <a title="Edit" href="admin_facility.php?edit=<?php echo $row['facility_id']; ?>" class="edit_btn" >✏️</a>
-        <a title="Delete" href="#" class="del_btn" onclick="confirmDelete(<?php echo $row['facility_id']; ?>)">❌</a>
+        <a title="Edit" href="admin_booking_approval.php?edit=<?php echo $row['booking_id']; ?>" class="edit_btn" >✏️</a>
       </td>
-      <td><?php echo '<img src="data:image/jpeg;base64,'.base64_encode($row['facility_image'] ).'" height="150" width="150" class="img-thumnail" />' ?></td>
+      <td><?php echo $row['booking_id'];?></td>
+      <td><?php echo $row['reservation_date'];?></td>                  
+      <td><?php echo $row['reservation_time'];?></td>
+      <td><?php echo $row['reservation_purpose'];?></td>
+      <td><?php echo $row['approval_status'];?></td>
+      <td><?php echo $row['customer_id'];?></td>
+      <td><?php echo $row['customer_name'];?></td>
       <td><?php echo $row['facility_id'];?></td>
-      <td><?php echo $row['facility_name'];?></td>                  
-      <td><?php echo $row['facility_type'];?></td>
-      <td><?php echo $row['facility_capacity'];?></td>
-      <td><?php echo $row['for_events'];?></td>
-      <td><?php echo $row['description'];?></td>
-      <td><?php echo $row['price'];?></td>
+      <td><?php echo $row['facility_name'];?></td>
     </tr>   
     <?php endwhile;?>
   </tbody>
@@ -292,15 +312,6 @@ for (i = 0; i < dropdown.length; i++) {
   dropdownContent.style.display = "block";
   }
   });
-}
-
-
-/* ____DELETE BUTTON____ */
-function confirmDelete(facilityId) {
-  let text = "Do you want to delete facility with ID = " + facilityId + "?\nClick OK to confirm.";
-  if (confirm(text)) {
-    location.href = "admin_process.php?delete9=" + facilityId;
-  }
 }
 
 

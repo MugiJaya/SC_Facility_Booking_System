@@ -194,7 +194,7 @@ if (isset($_GET['edit'])) {
     </tr>
     <tr>
       <td colspan="3">
-        <button class="btn" type="submit" name="save8" id="save8" >Save</button>
+        <button class="btn" type="submit" name="save8" id="save10" >Save</button>
       </td> 
     </tr>
   </form>

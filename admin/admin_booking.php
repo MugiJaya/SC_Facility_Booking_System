@@ -90,7 +90,7 @@ if (isset($_GET['edit'])) {
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
-    <a class="active" href="admin_customer.php">Customer Information</a>
+    <a href="admin_customer.php">Customer Information</a>
     <a href="admin_customer_approval.php">Account Approval</a>
   </div>
   <!-- ------------------ Company ------------------ -->
