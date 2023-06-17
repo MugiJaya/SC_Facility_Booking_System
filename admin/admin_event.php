@@ -6,9 +6,9 @@ if(!isset($_SESSION['session_id']))
 }
 //fetch the record to update 
 if (isset($_GET['edit'])) {
-    $booking_id = $_GET['edit'];
+    $evt_reservation_id = $_GET['edit'];
     $update = true;
-    $record = mysqli_query($conn, "select bk.*, cus.*, fac.*, pay.* from booking bk inner join customer cus on bk.customer_id = cus.customer_id inner join facility fac on bk.facility_id = fac.facility_id left join payment pay on bk.payment_id = pay.payment_id where booking_id = $booking_id");
+    $record = mysqli_query($conn, "select ersv.*, com.*, fac.*, pay.* from event_reservation ersv inner join company com on ersv.company_id = com.company_id inner join facility fac on ersv.facility_id = fac.facility_id left join payment pay on ersv.payment_id = pay.payment_id where evt_reservation_id = $evt_reservation_id");
     if (count($record) == 1 ) 
     {
       $n = mysqli_fetch_array($record);
@@ -17,11 +17,14 @@ if (isset($_GET['edit'])) {
       $reservation_start_time = $n['reservation_start_time'];
       $reservation_end_time = $n['reservation_end_time'];
       $reservation_purpose = $n['reservation_purpose'];
+      $event_type = $n['event_type'];
+      $request = $n['request'];
       $approval_status = $n['approval_status'];
       $rating = $n['rating'];
       $feedback = $n['feedback'];
-      $customer_id = $n['customer_id'];
-      $customer_name = $n['customer_name'];
+      $company_id = $n['company_id'];
+      $company_name = $n['company_name'];
+      $client_name = $n['client_name'];
       $facility_id = $n['facility_id'];
       $facility_name = $n['facility_name'];
       $payment_id = $n['payment_id'];
@@ -36,7 +39,7 @@ if (isset($_GET['edit'])) {
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin / Booking</title>
+  <title>Admin / Event</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="admin_css_1.css">
@@ -107,9 +110,9 @@ if (isset($_GET['edit'])) {
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
-    <a class="active" href="admin_booking.php">Booking Information</a>
+    <a href="admin_booking.php">Booking Information</a>
     <a href="admin_booking_approval.php">Booking Approval</a>
-    <a href="admin_event.php">Event Reservation Information</a>
+    <a class="active" href="admin_event.php">Event Reservation Information</a>
     <a href="admin_event_approval.php">Event Reservation Approval</a>
   </div>
   <!-- ------------------ Facility ------------------ -->
@@ -160,9 +163,9 @@ if (isset($_GET['edit'])) {
   <form method="post" action="admin_process.php" enctype="multipart/form-data">
     <tr>
       <td>
-        <label>Booking ID:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="booking_id" value="<?php echo $booking_id; ?>" readonly>
-      </td>    
+        <label>Event Reservation ID:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="evt_reservation_id" value="<?php echo $evt_reservation_id; ?>" readonly>
+      </td>
       <td>
         <label>Reservation Time:</label><br>
         <input class="input2" type="text" name="reservation_time" value="<?php echo $reservation_time; ?>">
@@ -182,6 +185,14 @@ if (isset($_GET['edit'])) {
         <input class="input2" type="text" name="reservation_purpose" value="<?php echo $reservation_purpose; ?>">
       </td>
       <td>
+        <label>Event Type:</label><br>
+        <input class="input2" type="text" name="event_type" value="<?php echo $event_type; ?>">
+      </td> 
+      <td>
+        <label>Request:</label><br>
+        <input class="input2" type="text" name="request" value="<?php echo $request; ?>">
+      </td> 
+      <td>
         <label>Approval Status:</label><br>
         <select class="input2" name="approval_status"> 
           <option value="<?php echo $approval_status;?>" hidden><?php echo $approval_status; ?></option>
@@ -189,7 +200,9 @@ if (isset($_GET['edit'])) {
           <option value="Approved">Approved</option>
           <option value="Declined">Declined</option>
         </select>
-      </td> 
+      </td>
+    </tr>
+    <tr>
       <td>
         <label>Rating:</label><br>
         <input style="background-color: #e6e6e6;" class="input2" type="text" name="rating" value="<?php echo $rating; ?>" readonly>
@@ -198,16 +211,20 @@ if (isset($_GET['edit'])) {
         <label>Feedback:</label><br>
         <input style="background-color: #e6e6e6;" class="input2" type="text" name="feedback" value="<?php echo $feedback; ?>" readonly>
       </td>
+      <td>
+        <label>Company ID:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="company_id" value="<?php echo $company_id; ?>" readonly>
+      </td>
+      <td>
+        <label>Company Name:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="company_name" value="<?php echo $company_name; ?>" readonly>
+      </td>
     </tr>
     <tr>
       <td>
-        <label>Customer ID:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="customer_id" value="<?php echo $customer_id; ?>" readonly>
+        <label>Client Name:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="client_name" value="<?php echo $client_name; ?>" readonly>
       </td>
-      <td>
-        <label>Customer Name:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="customer_name" value="<?php echo $customer_name; ?>" readonly>
-      </td> 
       <td>
         <label>Facility ID:</label><br>
         <input style="background-color: #e6e6e6;" class="input2" type="text" name="facility_id" value="<?php echo $facility_id; ?>" readonly>
@@ -228,7 +245,7 @@ if (isset($_GET['edit'])) {
       </td>  
       <td>
         <label>Payment Date:</label><br>
-        <input class="input2" type="text" name="payment_date" value="<?php echo $payment_date; ?>">
+        <input class="input2" type="date" name="payment_date" value="<?php echo $payment_date; ?>">
       </td>
       <td>
         <label>Payment Time:</label><br>
@@ -238,7 +255,7 @@ if (isset($_GET['edit'])) {
     <tr>
       <td colspan="4">
         <?php if ($update == true): ?>
-        <button class="btn" type="submit" name="update5" >Update</button>
+        <button class="btn" type="submit" name="update7" >Update</button>
         <?php else: ?>
         <p></p>
         <?php endif ?>
@@ -252,7 +269,7 @@ if (isset($_GET['edit'])) {
 
 
 <?php
-$query = "select bk.*, cus.*, fac.*, pay.* from booking bk inner join customer cus on bk.customer_id = cus.customer_id inner join facility fac on bk.facility_id = fac.facility_id left join payment pay on bk.payment_id = pay.payment_id where bk.approval_status = 'Approved'";
+$query = "select ersv.*, com.*, fac.*, pay.* from event_reservation ersv inner join company com on ersv.company_id = com.company_id inner join facility fac on ersv.facility_id = fac.facility_id left join payment pay on ersv.payment_id = pay.payment_id where ersv.approval_status = 'Approved'";
 $search_result = filterTable($query);
 
 // function to connect and execute the query
@@ -274,16 +291,19 @@ function filterTable($query)
   <thead>
     <tr>
       <th>#</th>
-      <th>Booking ID</th>
+      <th>Event Reservation ID</th>
       <th>Reservation Time</th>
       <th>Reservation Start Time</th>
       <th>Reservation End Time</th>
       <th>Reservation Purpose</th>
+      <th>Event Type</th>
+      <th>Request</th>
       <th>Approval Status</th>
       <th>Rating</th>
       <th>Feedback</th>
-      <th>Customer ID</th>
-      <th>Customer Name</th>
+      <th>Company ID</th>
+      <th>Company Name</th>
+      <th>Client Name</th>
       <th>Facility ID</th>
       <th>Facility Name</th>
       <th>Payment ID</th>
@@ -295,16 +315,19 @@ function filterTable($query)
   <tfoot>
     <tr>
       <th id='no'>#</th>
-      <th id='in'>Booking ID</th>
+      <th id='in'>Event Reservation ID</th>
       <th id='in'>Reservation Time</th>
       <th id='in'>Reservation Start Time</th>
       <th id='in'>Reservation End Time</th>
       <th id='in'>Reservation Purpose</th>
+      <th id='in'>Event Type</th>
+      <th id='in'>Request</th>
       <th id='in'>Approval Status</th>
       <th id='in'>Rating</th>
       <th id='in'>Feedback</th>
-      <th id='in'>Customer ID</th>
-      <th id='in'>Customer Name</th>
+      <th id='in'>Company ID</th>
+      <th id='in'>Company Name</th>
+      <th id='in'>Client Name</th>
       <th id='in'>Facility ID</th>
       <th id='in'>Facility Name</th>
       <th id='in'>Payment ID</th>
@@ -315,20 +338,23 @@ function filterTable($query)
   </tfoot>
   <tbody>
     <?php while($row = mysqli_fetch_array($search_result)):?>    
-    <tr class="breakrow" onclick="location.href='admin_booking.php?edit=<?php echo $row['booking_id']; ?>'">
+    <tr class="breakrow" onclick="location.href='admin_event.php?edit=<?php echo $row['evt_reservation_id']; ?>'">
       <td>
-        <a title="Edit" href="admin_booking.php?edit=<?php echo $row['booking_id']; ?>" class="edit_btn" >✏️</a>
+        <a title="Edit" href="admin_event.php?edit=<?php echo $row['evt_reservation_id']; ?>" class="edit_btn" >✏️</a>
       </td>
-      <td><?php echo $row['booking_id'];?></td>                  
+      <td><?php echo $row['evt_reservation_id'];?></td>
       <td><?php echo $row['reservation_time'];?></td>
       <td><?php echo $row['reservation_start_time'];?></td>
       <td><?php echo $row['reservation_end_time'];?></td>
       <td><?php echo $row['reservation_purpose'];?></td>
+      <td><?php echo $row['event_type'];?></td>
+      <td><?php echo $row['request'];?></td>
       <td><?php echo $row['approval_status'];?></td>
       <td><?php echo $row['rating'];?></td>
       <td><?php echo $row['feedback'];?></td>
-      <td><?php echo $row['customer_id'];?></td>
-      <td><?php echo $row['customer_name'];?></td>
+      <td><?php echo $row['company_id'];?></td>
+      <td><?php echo $row['company_name'];?></td>
+      <td><?php echo $row['client_name'];?></td>
       <td><?php echo $row['facility_id'];?></td>
       <td><?php echo $row['facility_name'];?></td>
       <td><?php echo $row['payment_id'];?></td>

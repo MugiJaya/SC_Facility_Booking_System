@@ -8,7 +8,7 @@ if(!isset($_SESSION['session_id']))
 if (isset($_GET['edit'])) {
     $equipment_id = $_GET['edit'];
     $update = true;
-    $record = mysqli_query($conn, "select * from equipment where equipment_id = $equipment_id");
+    $record = mysqli_query($conn, "select eqp.*, fac.facility_name from equipment eqp inner join facility fac on eqp.facility_id = fac.facility_id where eqp.equipment_id = $equipment_id");
     if (count($record) == 1 ) 
     {
       $n = mysqli_fetch_array($record);
@@ -19,6 +19,7 @@ if (isset($_GET['edit'])) {
       $description = $n['description'];
       $file = $n['file'];
       $facility_id = $n['facility_id'];
+      $facility_name = $n['facility_name'];
     }
   }
 ?>
@@ -179,8 +180,8 @@ if (isset($_GET['edit'])) {
       <td>
         <label>Facility:</label><br>
         <select class="input2" name="facility_id">
-        <option value="<?php echo $facility_id;?>" hidden><?php echo $facility_id; ?></option>
-        <option value="">--- Select ---</option> 
+        <option value="<?php echo $facility_name;?>" hidden><?php echo $facility_name; ?></option>
+        <option value="">--- Select ---</option>
         <?php 
         $sql = mysqli_query($conn, "select * from facility");
         while ($facility_id = $sql->fetch_assoc())
@@ -210,7 +211,7 @@ if (isset($_GET['edit'])) {
 
 
 <?php
-$query = "select * from equipment";
+$query = "select eqp.*, fac.facility_name from equipment eqp inner join facility fac on eqp.facility_id = fac.facility_id";
 $search_result = filterTable($query);
 
 // function to connect and execute the query
@@ -239,6 +240,7 @@ function filterTable($query)
       <th>Quantity</th>
       <th>Description</th>
       <th>Facility ID</th>
+      <th>Facility Name</th>
     </tr>
   </thead>
   <tfoot>
@@ -251,6 +253,7 @@ function filterTable($query)
       <th id='in'>Quantity</th>
       <th id='in'>Description</th>
       <th id='in'>Facility ID</th>
+      <th id='in'>Facility Name</th>
     </tr>
   </tfoot>
   <tbody>
@@ -267,6 +270,7 @@ function filterTable($query)
       <td><?php echo $row['quantity'];?></td>
       <td><?php echo $row['description'];?></td>
       <td><?php echo $row['facility_id'];?></td>
+      <td><?php echo $row['facility_name'];?></td>
     </tr>   
     <?php endwhile;?>
   </tbody>

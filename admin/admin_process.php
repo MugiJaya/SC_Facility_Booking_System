@@ -4,7 +4,7 @@ session_start();
 $session_id = $_SESSION['session_id'];
 
 
-/*----------------CUSTOMER---------------*/
+/*----------------Customer---------------*/
 $customer_name = "";
 $dob = "";
 $gender = "";
@@ -16,7 +16,7 @@ $verification_status = "";
 $admin_id = "";
 $customer_id = 0;
 
-/*----------------COMPANY---------------*/
+/*----------------Company---------------*/
 $client_name = "";
 $dob = "";
 $gender = "";
@@ -34,8 +34,9 @@ $admin_id = "";
 $company_id = 0;
 
 /*----------------Booking---------------*/
-$reservation_date = "";
 $reservation_time = "";
+$reservation_start_time = "";
+$reservation_end_time = "";
 $reservation_purpose = "";
 $approval_status = "";
 $rating = "";
@@ -49,6 +50,27 @@ $payment_amount = "";
 $payment_date = "";
 $payment_time = "";
 $booking_id = 0;
+
+/*----------------Event Reservation---------------*/
+$reservation_time = "";
+$reservation_start_time = "";
+$reservation_end_time = "";
+$reservation_purpose = "";
+$approval_status = "";
+$rating = "";
+$event_type = "";
+$request = "";
+$feedback = "";
+$company_id = "";
+$company_name = "";
+$client_name = "";
+$facility_id = "";
+$facility_name = "";
+$payment_id = "";
+$payment_amount = "";
+$payment_date = "";
+$payment_time = "";
+$evt_reservation_id = 0;
 
 /*----------------Facility---------------*/
 $facility_name = "";
@@ -67,7 +89,31 @@ $quantity	 = "";
 $description = "";
 $file = "";
 $facility_id = "";
+$facility_name = "";
 $equipment_id = 0;
+
+/*----------------Equipment Reservation---------------*/
+
+$evt_reservation_id = "";
+$reservation_time = "";
+$reservation_start_time = "";
+$reservation_end_time = "";
+$reservation_purpose = "";
+$event_type = "";
+$request = "";
+$company_id = "";
+$company_name = "";
+$client_name = "";
+$facility_id	 = "";
+$facility_name = "";
+$equipment_id = "";
+$equipment_name = "";
+$eqiupment_type = "";
+$quantity = "";
+$description = "";
+$reservation_quantity = "";
+$reservation_description = "";
+$eqp_reservation_id = 0;
 
 /*----------------UPDATE---------------*/
 $update = false;
@@ -203,8 +249,9 @@ if (isset($_GET['delete4']))
 if (isset($_POST['update5'])) 
 {
 	$booking_id = $_POST['booking_id'];
-	$reservation_date = $_POST['reservation_date'];
     $reservation_time = $_POST['reservation_time'];
+    $reservation_start_time = $_POST['reservation_start_time'];
+    $reservation_end_time = $_POST['reservation_end_time'];
     $reservation_purpose = $_POST['reservation_purpose'];
     $approval_status = $_POST['approval_status'];
     $rating = $_POST['rating'];
@@ -218,7 +265,7 @@ if (isset($_POST['update5']))
     $payment_date = $_POST['payment_date'];
     $payment_time = $_POST['payment_time'];
 	
-	mysqli_query($conn, "update booking set reservation_date='$reservation_date', reservation_time='$reservation_time', reservation_purpose='$reservation_purpose', approval_status='$approval_status', rating='$rating', feedback='$feedback' where booking_id=$booking_id");
+	mysqli_query($conn, "update booking set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', approval_status='$approval_status', rating='$rating', feedback='$feedback' where booking_id=$booking_id");
 
 	mysqli_query($conn, "update payment set payment_amount='$payment_amount', payment_date='$payment_date', payment_time='$payment_time' where payment_id=$payment_id");
 
@@ -230,8 +277,9 @@ if (isset($_POST['update5']))
 if (isset($_POST['update6'])) 
 {
 	$booking_id = $_POST['booking_id'];
-	$reservation_date = $_POST['reservation_date'];
     $reservation_time = $_POST['reservation_time'];
+    $reservation_start_time = $_POST['reservation_start_time'];
+    $reservation_end_time = $_POST['reservation_end_time'];
     $reservation_purpose = $_POST['reservation_purpose'];
     $approval_status = $_POST['approval_status'];
     $rating = $_POST['rating'];
@@ -245,13 +293,71 @@ if (isset($_POST['update6']))
     $payment_date = $_POST['payment_date'];
     $payment_time = $_POST['payment_time'];
 	
-	mysqli_query($conn, "update booking set reservation_date='$reservation_date', reservation_time='$reservation_time', reservation_purpose='$reservation_purpose', approval_status='$approval_status' where booking_id=$booking_id");
+	mysqli_query($conn, "update booking set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', approval_status='$approval_status' where booking_id=$booking_id");
 
 	$_SESSION['msg'] = "Updated!"; 
 	header('location: admin_booking_approval.php');
 }
 
 
+if (isset($_POST['update7'])) 
+{
+	$evt_reservation_id = $_POST['evt_reservation_id'];
+    $reservation_time = $_POST['reservation_time'];
+    $reservation_start_time = $_POST['reservation_start_time'];
+    $reservation_end_time = $_POST['reservation_end_time'];
+    $reservation_purpose = $_POST['reservation_purpose'];
+    $event_type = $_POST['event_type'];
+    $request = $_POST['request'];
+    $approval_status = $_POST['approval_status'];
+    $rating = $_POST['rating'];
+    $feedback = $_POST['feedback'];
+    $company_id = $_POST['company_id'];
+    $company_name = $_POST['company_name'];
+    $client_name = $_POST['client_name'];
+    $facility_id = $_POST['facility_id'];
+    $facility_name = $_POST['facility_name'];
+    $payment_id = $_POST['payment_id'];
+    $payment_amount = $_POST['payment_amount'];
+    $payment_date = $_POST['payment_date'];
+    $payment_time = $_POST['payment_time'];
+	
+	mysqli_query($conn, "update event_reservation set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', event_type='$event_type', request='$request', approval_status='$approval_status', rating='$rating', feedback='$feedback' where evt_reservation_id=$evt_reservation_id");
+
+	mysqli_query($conn, "update payment set payment_amount='$payment_amount', payment_date='$payment_date', payment_time='$payment_time' where payment_id=$payment_id");
+
+	$_SESSION['msg'] = "Updated!"; 
+	header('location: admin_event.php');
+}
+
+
+if (isset($_POST['update8'])) 
+{
+	$evt_reservation_id = $_POST['evt_reservation_id'];
+    $reservation_time = $_POST['reservation_time'];
+    $reservation_start_time = $_POST['reservation_start_time'];
+    $reservation_end_time = $_POST['reservation_end_time'];
+    $reservation_purpose = $_POST['reservation_purpose'];
+    $event_type = $_POST['event_type'];
+    $request = $_POST['request'];
+    $approval_status = $_POST['approval_status'];
+    $rating = $_POST['rating'];
+    $feedback = $_POST['feedback'];
+    $company_id = $_POST['company_id'];
+    $company_name = $_POST['company_name'];
+    $client_name = $_POST['client_name'];
+    $facility_id = $_POST['facility_id'];
+    $facility_name = $_POST['facility_name'];
+    $payment_id = $_POST['payment_id'];
+    $payment_amount = $_POST['payment_amount'];
+    $payment_date = $_POST['payment_date'];
+    $payment_time = $_POST['payment_time'];
+	
+	mysqli_query($conn, "update event_reservation set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', event_type='$event_type', request='$request', approval_status='$approval_status', rating='$rating', feedback='$feedback' where evt_reservation_id=$evt_reservation_id");
+
+	$_SESSION['msg'] = "Updated!"; 
+	header('location: admin_event_approval.php');
+}
 
 
 /*------------------------------------------------------------FACILITY------------------------------------------------------------*/
@@ -378,5 +484,49 @@ if (isset($_GET['delete10']))
 	$_SESSION['msg'] = "Deleted!"; 
 	header('location: admin_equipment.php');
 }
+
+
+/*---------------------------------------------------------EQUIPMENT RESERVATION---------------------------------------------------------*/
+
+
+if (isset($_POST['update11'])) 
+{
+	$eqp_reservation_id = $_POST['eqp_reservation_id'];
+    $reservation_quantity = $_POST['reservation_quantity'];
+    $reservation_description = $_POST['reservation_description'];
+	$evt_reservation_id = $_POST['evt_reservation_id'];
+    $reservation_time = $_POST['reservation_time'];
+    $reservation_start_time = $_POST['reservation_start_time'];
+    $reservation_end_time = $_POST['reservation_end_time'];
+    $reservation_purpose = $_POST['reservation_purpose'];
+    $event_type = $_POST['event_type'];
+    $request = $_POST['request'];
+    $company_id = $_POST['company_id'];
+    $company_name = $_POST['company_name'];
+    $client_name = $_POST['client_name'];
+    $facility_id = $_POST['facility_id'];
+    $facility_name = $_POST['facility_name'];
+    $equipment_id = $_POST['equipment_id'];
+    $equipment_name = $_POST['equipment_name'];
+    $eqiupment_type = $_POST['eqiupment_type'];
+    $quantity = $_POST['quantity'];
+    $description = $_POST['description'];
+	
+	mysqli_query($conn, "update equipment_reservation set reservation_quantity='$reservation_quantity', reservation_description='$reservation_description' where eqp_reservation_id=$eqp_reservation_id");
+
+	/*
+	mysqli_query($conn, "update event_reservation set reservation_reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', event_type='$event_type', request='$request' where evt_reservation_id=$evt_reservation_id");
+
+	mysqli_query($conn, "update company set company_name='$company_name', client_name='$client_name' where company_id=$company_id");
+
+	mysqli_query($conn, "update facility set facility_name='$facility_name' where facility_id=$facility_id");
+
+	mysqli_query($conn, "update equipment set equipment_name='$equipment_name', eqiupment_type='$eqiupment_type', quantity='$quantity', description='$description' where equipment_id=$equipment_id");
+	*/
+
+	$_SESSION['msg'] = "Updated!"; 
+	header('location: admin_equipment_reservation.php');
+}
+
 
 ?>

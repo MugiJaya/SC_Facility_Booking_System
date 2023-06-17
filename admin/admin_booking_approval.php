@@ -13,8 +13,9 @@ if (isset($_GET['edit'])) {
     {
       $n = mysqli_fetch_array($record);
 
-      $reservation_date = $n['reservation_date'];
       $reservation_time = $n['reservation_time'];
+      $reservation_start_time = $n['reservation_start_time'];
+      $reservation_end_time = $n['reservation_end_time'];
       $reservation_purpose = $n['reservation_purpose'];
       $approval_status = $n['approval_status'];
       $rating = $n['rating'];
@@ -161,21 +162,25 @@ if (isset($_GET['edit'])) {
       <td>
         <label>Booking ID:</label><br>
         <input style="background-color: #e6e6e6;" class="input2" type="text" name="booking_id" value="<?php echo $booking_id; ?>" readonly>
-      </td>
-      <td>
-        <label>Reservation Date:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="reservation_date" value="<?php echo $reservation_date; ?>" readonly>
       </td>     
       <td>
         <label>Reservation Time:</label><br>
         <input style="background-color: #e6e6e6;" class="input2" type="text" name="reservation_time" value="<?php echo $reservation_time; ?>" readonly>
+      </td>
+      <td>
+        <label>Reservation Start Time:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="datetime-local" name="reservation_start_time" value="<?php echo $reservation_start_time; ?>" readonly>
       </td> 
+      <td>
+        <label>Reservation End Time:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="datetime-local" name="reservation_end_time" value="<?php echo $reservation_end_time; ?>" readonly>
+      </td>
+    </tr>
+    <tr>
       <td>
         <label>Reservation Purpose:</label><br>
         <input style="background-color: #e6e6e6;" class="input2" type="text" name="reservation_purpose" value="<?php echo $reservation_purpose; ?>" readonly>
       </td> 
-    </tr>
-    <tr>
       <td>
         <label>Approval Status:</label><br>
         <select class="input2" name="approval_status"> 
@@ -244,8 +249,9 @@ function filterTable($query)
     <tr>
       <th>#</th>
       <th>Booking ID</th>
-      <th>Reservation Date</th>
       <th>Reservation Time</th>
+      <th>Reservation Start Time</th>
+      <th>Reservation End Time</th>
       <th>Reservation Purpose</th>
       <th>Approval Status</th>
       <th>Customer ID</th>
@@ -258,8 +264,9 @@ function filterTable($query)
     <tr>
       <th id='no'>#</th>
       <th id='in'>Booking ID</th>
-      <th id='in'>Reservation Date</th>
       <th id='in'>Reservation Time</th>
+      <th id='in'>Reservation Start Time</th>
+      <th id='in'>Reservation End Time</th>
       <th id='in'>Reservation Purpose</th>
       <th id='in'>Approval Status</th>
       <th id='in'>Customer ID</th>
@@ -274,9 +281,10 @@ function filterTable($query)
       <td>
         <a title="Edit" href="admin_booking_approval.php?edit=<?php echo $row['booking_id']; ?>" class="edit_btn" >✏️</a>
       </td>
-      <td><?php echo $row['booking_id'];?></td>
-      <td><?php echo $row['reservation_date'];?></td>                  
+      <td><?php echo $row['booking_id'];?></td>                
       <td><?php echo $row['reservation_time'];?></td>
+      <td><?php echo $row['reservation_start_time'];?></td>
+      <td><?php echo $row['reservation_end_time'];?></td>
       <td><?php echo $row['reservation_purpose'];?></td>
       <td><?php echo $row['approval_status'];?></td>
       <td><?php echo $row['customer_id'];?></td>
