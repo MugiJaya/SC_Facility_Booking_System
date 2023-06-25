@@ -64,9 +64,9 @@ include "../connect.php";
 					$row = mysqli_fetch_assoc($result);
 					if($row['email'] === $email && $row['password'] === $password)
 					{
-						$_SESSION['email'] = $row['email'];
+						$_SESSION['session_id'] = $row['email'];
 
-						header("Location: ../main/main.php");
+						header("Location: ../customer/home.php");
 					}
 					else
 					{
@@ -90,9 +90,9 @@ include "../connect.php";
 					$row = mysqli_fetch_assoc($result);
 					if($row['email'] === $email && $row['password'] === $password)
 					{
-						$_SESSION['email'] = $row['email'];
+						$_SESSION['session_id'] = $row['email'];
 
-						header("Location: ../main/main.php");
+						header("Location: ../company/home.php");
 					}
 					else
 					{
