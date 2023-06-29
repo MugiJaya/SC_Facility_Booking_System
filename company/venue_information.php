@@ -12,7 +12,7 @@ if(!isset($_SESSION['session_id']))
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="company_css_1.css">
-  <link rel="stylesheet" href="venues_information_css.css">
+  <link rel="stylesheet" href="venue_information_css.css">
 <style>
 
 </style>
@@ -25,7 +25,7 @@ if(!isset($_SESSION['session_id']))
   <div class="dropdown">
     <button class="dropbtn">Reservation <i class="fa fa-caret-down"></i></button>
     <div class="dropdown-content">
-      <a href="#">Reserve A Venue</a>
+      <a href="reserve_1.php">Reserve A Venue</a>
       <a href="#">Upcoming Reservations</a>
       <a href="#">Reservation History</a>
     </div>

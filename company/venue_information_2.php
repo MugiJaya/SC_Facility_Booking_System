@@ -12,7 +12,7 @@ if(!isset($_SESSION['session_id']))
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="company_css_1.css">
-  <link rel="stylesheet" href="venues_css.css">
+  <link rel="stylesheet" href="venue_information_css.css">
 <style>
 
 </style>
@@ -21,9 +21,9 @@ if(!isset($_SESSION['session_id']))
 
 <div class="topnav">
   <a href="home.php">Home</a>
-  <a style="background-color: #00ace6; color: white;" href="venues.php">Venues</a>
+  <a href="venues.php">Venues</a>
   <div class="dropdown">
-    <button class="dropbtn">Reservation <i class="fa fa-caret-down"></i></button>
+    <button style="background-color: #00ace6; color: white;" class="dropbtn">Reservation <i class="fa fa-caret-down"></i></button>
     <div class="dropdown-content">
       <a href="reserve_1.php">Reserve A Venue</a>
       <a href="#">Upcoming Reservations</a>
@@ -43,41 +43,52 @@ if(!isset($_SESSION['session_id']))
 
 
 <div class="container">
-  <h1 class="heading">Venues</h1>
-  <div class="box-container">
+  <section class="details">
     <?php
-      $sql = "select * from facility where for_events = 'Yes'";
-      $venues = mysqli_query($conn,$sql) or die(mysqli_error($conn));
-      while ($row = mysqli_fetch_assoc($venues)) {
-    ?>
+      $facility_id = $_POST['facility_id'];
+      $sql = "select * from facility where facility_id = '".$facility_id."'";
 
-    <div class="box">
-      <div class="image">
+      $result = mysqli_query($conn,$sql) or die(mysqli_error($conn));
+
+      while ($row = mysqli_fetch_assoc($result)) {
+    ?>
+    
+    <h1 class="title"><?php echo $row["facility_name"]?></h1>
+
+    <div class="cards">
+      <div class="images">
         <?php 
           echo '<img src="data:image/jpeg;base64,'.base64_encode($row['facility_image']).'"/>';
         ?>
       </div>
 
-      <div class="content">
-        <h3>
-          <?php 
-            echo $row["facility_name"];      
-          ?>  
-        </h3>
-        <div class="icons"></div>
-        <form action="venue_information.php" method="post">
-          <input type="hidden" name="facility_id" value="<?php echo $row["facility_id"]; ?>">
-          <button class="btn" type="submit">Read More</button>
-        </form>
+      <div class="caption">
+        <p>
+          <b>Description</b>:<br>
+          <?php echo $row["description"];?>
+        </p>
+        <p>
+          <b>Facility Type</b>:<br>
+          <?php echo $row["facility_type"];?>
+        </p>
+        <p>
+          <b>Price</b>:<br>
+          <?php echo $row["price"];?>
+        </p>
+        <p>
+          <b>Capacity</b>:<br>
+          <?php echo $row["facility_capacity"]?>
+        </p>
       </div>
-
     </div>
 
-    <?php
+    <?php 
       }
     ?>
-  </div>
-  <div id="load-more">Load More</div><br>
+  </section>
+
+  <a href="reserve_2.php" class="button">Back</a>
+
 </div>
 
 

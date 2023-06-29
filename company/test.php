@@ -7,7 +7,8 @@ $session_id = $_SESSION['session_id'];
 //---------------------------------------------------------UPDATE PROFILE---------------------------------------------------------//
 
 
-if(isset($_POST['update_profile'])){
+if(isset($_POST['update_profile']))
+{
    	$client_name = mysqli_real_escape_string($conn, $_POST['client_name']);
    	$email = mysqli_real_escape_string($conn, $_POST['email']);
    	$dob = $_POST['dob'];
@@ -20,7 +21,7 @@ if(isset($_POST['update_profile'])){
    	$position = mysqli_real_escape_string($conn, $_POST['position']);
    	$company_address = mysqli_real_escape_string($conn, $_POST['company_address']);
 
-   	mysqli_query($conn, "update company set client_name='$client_name', dob='$dob', address='$address', contact_no='$contact_no', email='$email', company_name='$company_name', company_address='$company_address', company_contact_no='$company_contact_no', company_email='$company_email', position='$position' where email=$session_id");
+   	mysqli_query($conn, "update company set client_name='$client_name', dob='$dob', address='$address', contact_no='$contact_no', email='$email', company_name='$company_name', company_address='$company_address', company_contact_no='$company_contact_no', company_email='$company_email', position='$position' where email='$session_id'");
 
    	$old_pass = $_POST['old_pass'];
    	$update_pass = mysqli_real_escape_string($conn, $_POST['update_pass']);
@@ -47,7 +48,7 @@ if(isset($_POST['update_profile'])){
    	$update_image_tmp_name = $_FILES['update_image']['tmp_name'];
 
    	if(!empty($update_image)){
-   		if($update_image_size > 60000){
+   		if($update_image_size > 4000000000){
    			$message[] = 'image is too large';
    		}
    		else{
@@ -67,7 +68,67 @@ if(isset($_POST['update_profile'])){
    			}
    		}
    	}
+   	$_SESSION['message'] = $message;
+
    	header('location: profile.php');
+}
+
+
+//---------------------------------------------------------RESERVATION---------------------------------------------------------//
+
+
+if (isset($_POST['reservation'])) 
+{
+    $reservation_start_time = $_POST['reservation_start_time'];
+    $reservation_end_time = $_POST['reservation_end_time'];
+    $reservation_purpose = $_POST['reservation_purpose'];
+    $event_type = $_POST['event_type'];
+    $request = $_POST['request'];
+    $facility_id = $_POST['facility_id'];
+
+    $message = [];
+
+    if (empty($reservation_start_time)) 
+    {
+        $message[] = 'Reservation Start Time is Required!';
+    }
+    if (empty($reservation_end_time)) 
+    {
+        $message[] = 'Reservation End Time is Required!';
+    }
+    if (empty($reservation_purpose)) 
+    {
+        $message[] = 'Reservation Purpose is Required!';
+    }
+    if (empty($event_type)) 
+    {
+        $message[] = 'Event Type is Required!';
+    }
+    if (empty($request)) 
+    {
+        $message[] = 'Request is Required!';
+    }
+    if (!empty($message)) 
+    {
+        $_SESSION['message'] = $message;
+        header('Location: reserve_1.php');
+        exit();
+    } 
+    elseif (!empty($facility_id)) 
+    {
+        header('Location: reserve_2.php');
+        exit();
+    }
+    else 
+    {
+    	$company_id_query = mysqli_query($conn, "SELECT company_id FROM company WHERE email='$session_id'");
+		$company_id_row = mysqli_fetch_assoc($company_id_query);
+		$company_id = $company_id_row['company_id'];
+
+    	mysqli_query($conn, "insert into event_reservation (reservation_start_time, reservation_end_time, reservation_purpose, event_type, request, facility_id, company_id) values ('$reservation_start_time', '$reservation_end_time', '$reservation_purpose', '$event_type', '$request', '$facility_id', '$company_id')");
+
+        exit();
+    }
 }
 
 

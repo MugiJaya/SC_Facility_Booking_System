@@ -74,4 +74,72 @@ if(isset($_POST['update_profile']))
 }
 
 
+//---------------------------------------------------------RESERVATION---------------------------------------------------------//
+
+
+if (isset($_POST['reservation'])) 
+{
+    $reservation_start_time = $_POST['reservation_start_time'];
+    $reservation_end_time = $_POST['reservation_end_time'];
+    $reservation_purpose = $_POST['reservation_purpose'];
+    $event_type = $_POST['event_type'];
+    $request = $_POST['request'];
+
+    $message = [];
+
+    if (empty($reservation_start_time)) 
+    {
+        $message[] = 'Reservation Start Time is Required!';
+    }
+    if (empty($reservation_end_time)) 
+    {
+        $message[] = 'Reservation End Time is Required!';
+    }
+    if (empty($reservation_purpose)) 
+    {
+        $message[] = 'Reservation Purpose is Required!';
+    }
+    if (empty($event_type)) 
+    {
+        $message[] = 'Event Type is Required!';
+    }
+    if (empty($request)) 
+    {
+        $message[] = 'Request is Required!';
+    }
+    if (!empty($message)) 
+    {
+        $_SESSION['message'] = $message;
+        header('Location: reserve_1.php');
+    } 
+    else 
+    {
+    	$_SESSION['reservation_start_time'] = $reservation_start_time;
+        $_SESSION['reservation_end_time'] = $reservation_end_time;
+        $_SESSION['reservation_purpose'] = $reservation_purpose;
+        $_SESSION['event_type'] = $event_type;
+        $_SESSION['request'] = $request;
+        header('Location: reserve_2.php');
+    }
+}
+
+if (isset($_POST['reservation_2'])) 
+{
+	$reservation_start_time = $_POST['reservation_start_time'];
+    $reservation_end_time = $_POST['reservation_end_time'];
+    $reservation_purpose = $_POST['reservation_purpose'];
+    $event_type = $_POST['event_type'];
+    $request = $_POST['request'];
+    $facility_id = $_POST['facility_id'];
+
+    $company_id_query = mysqli_query($conn, "SELECT company_id FROM company WHERE email='$session_id'");
+    $company_id_row = mysqli_fetch_assoc($company_id_query);
+    $company_id = $company_id_row['company_id'];
+
+    mysqli_query($conn, "INSERT INTO event_reservation (reservation_start_time, reservation_end_time, reservation_purpose, event_type, request, facility_id, company_id) VALUES ('$reservation_start_time', '$reservation_end_time', '$reservation_purpose', '$event_type', '$request', '$facility_id', '$company_id')");
+
+    header('Location: reserve_3.php');
+}
+
+
 ?>
