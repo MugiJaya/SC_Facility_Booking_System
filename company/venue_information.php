@@ -26,8 +26,8 @@ if(!isset($_SESSION['session_id']))
     <button class="dropbtn">Reservation <i class="fa fa-caret-down"></i></button>
     <div class="dropdown-content">
       <a href="reserve_1.php">Reserve A Venue</a>
-      <a href="#">Upcoming Reservations</a>
-      <a href="#">Reservation History</a>
+      <a href="pending_reserve.php">Pending Reservations</a>
+      <a href="history_reserve.php">Reservation History</a>
     </div>
   </div>
   <div class="topnav-right">

@@ -162,5 +162,14 @@ if (isset($_POST['reservation_3']))
     }
 }
 
+if (isset($_POST['remove'])) 
+{
+	$eqp_reservation_id = $_POST['eqp_reservation_id'];
+
+    mysqli_query($conn, "delete from equipment_reservation where eqp_reservation_id = '$eqp_reservation_id'");
+
+    header('Location: manage_equipment.php');
+}
+
 
 ?>

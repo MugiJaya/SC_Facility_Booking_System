@@ -8,7 +8,7 @@ if(!isset($_SESSION['session_id']))
 
 <!DOCTYPE html>
 <html>
-  <title>Home</title>
+  <title>Pending Reservations</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="company_css_1.css">
@@ -19,10 +19,10 @@ if(!isset($_SESSION['session_id']))
 <body>
 
 <div class="topnav">
-  <a style="background-color: #00ace6; color: white;" href="home.php">Home</a>
+  <a href="home.php">Home</a>
   <a href="venues.php">Venues</a>
   <div class="dropdown">
-    <button class="dropbtn">Reservation <i class="fa fa-caret-down"></i></button>
+    <button style="background-color: #00ace6; color: white;" class="dropbtn">Reservation <i class="fa fa-caret-down"></i></button>
     <div class="dropdown-content">
       <a href="reserve_1.php">Reserve A Venue</a>
       <a href="pending_reserve.php">Pending Reservations</a>
@@ -41,7 +41,7 @@ if(!isset($_SESSION['session_id']))
 </div>
 
 <div style="padding-left:20px">
-  <h1>Home</h1>
+  <h1>PENDING</h1>
 </div>
 
 </body>

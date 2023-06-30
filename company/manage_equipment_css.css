@@ -28,13 +28,6 @@ body{
   padding:20px;
   border-radius: 5px;
   box-shadow: 0 5px 10px rgba(0,0,0,.2);
-  display: none;
-}
-
-.container .box-container .box:nth-child(1),
-.container .box-container .box:nth-child(2),
-.container .box-container .box:nth-child(3){
-  display: inline-block;
 }
 
 .container .box-container .box .image{
@@ -62,8 +55,6 @@ body{
 .container .box-container .box .content p{
   font-size: 15px;
   color:#777;
-  line-height: 2;
-  padding:15px 0;
 }
 
 .container .box-container .box .content .btn{

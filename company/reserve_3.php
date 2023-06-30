@@ -27,8 +27,8 @@ if(!isset($_SESSION['session_id']))
     <button style="background-color: #00ace6; color: white;" class="dropbtn">Reservation <i class="fa fa-caret-down"></i></button>
     <div class="dropdown-content">
       <a href="reserve_1.php">Reserve A Venue</a>
-      <a href="#">Upcoming Reservations</a>
-      <a href="#">Reservation History</a>
+      <a href="pending_reserve.php">Pending Reservations</a>
+      <a href="history_reserve.php">Reservation History</a>
     </div>
   </div>
   <div class="topnav-right">
@@ -90,27 +90,14 @@ if(!isset($_SESSION['session_id']))
     <button id="home" onclick="window.location.href='manage_equipment.php';">Manage Equipment</button>
         
     <form action="" method="post">                      
-        <button id="home" type="submit" name="finish">Finish</button>
+        <button id="home" type="submit" name="finish">Finish Reservation</button>
     </form>
         
     <?php
         if(isset($_POST['finish']))
         {
-            $test_spot ="select * from travel_itinerary where tripID = '$last_id';";
-            $result_spot = mysqli_query($conn, $test_spot);
-
-            $row = mysqli_num_rows($result_spot);
-            if($row>0)
-            {
-                echo "<script>alert('Add Success!');</script>";
-                echo"<meta http-equiv='refresh' content='0; url=createTrip3.php'/>";
-            }
-            else
-            {
-                echo "<script>alert('Please select at least one travel spot!');</script>";
-                echo"<meta http-equiv='refresh' content='0; url=createTrip2.php'/>";
-
-            }
+            echo "<script>alert('The reservation has been placed!\\nPlease wait for the admin\'s approval!');</script>";
+            echo "<meta http-equiv='refresh' content='0; url=pending_reserve.php'/>";
         }
     ?>
 </div>
