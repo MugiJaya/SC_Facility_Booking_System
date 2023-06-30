@@ -132,13 +132,34 @@ if (isset($_POST['reservation_2']))
     $request = $_POST['request'];
     $facility_id = $_POST['facility_id'];
 
-    $company_id_query = mysqli_query($conn, "SELECT company_id FROM company WHERE email='$session_id'");
+    $company_id_query = mysqli_query($conn, "select company_id from company where email='$session_id'");
     $company_id_row = mysqli_fetch_assoc($company_id_query);
     $company_id = $company_id_row['company_id'];
 
-    mysqli_query($conn, "INSERT INTO event_reservation (reservation_start_time, reservation_end_time, reservation_purpose, event_type, request, facility_id, company_id) VALUES ('$reservation_start_time', '$reservation_end_time', '$reservation_purpose', '$event_type', '$request', '$facility_id', '$company_id')");
+    mysqli_query($conn, "insert into event_reservation (reservation_start_time, reservation_end_time, reservation_purpose, event_type, request, facility_id, company_id) values ('$reservation_start_time', '$reservation_end_time', '$reservation_purpose', '$event_type', '$request', '$facility_id', '$company_id')");
 
+    $_SESSION['facility_id'] = $facility_id;
     header('Location: reserve_3.php');
+}
+
+if (isset($_POST['reservation_3'])) 
+{
+	$reservation_description = $_POST['reservation_description'];
+    $reservation_quantity = $_POST['reservation_quantity'];
+    $evt_reservation_id = $_POST['evt_reservation_id'];
+    $equipment_id = $_POST['equipment_id'];
+
+    if(empty($reservation_description))
+    {
+        echo "<script>alert('Please fill up description!');</script>";
+        echo "<meta http-equiv='refresh' content='0; url=reserve_3.php'/>";
+    }
+    else
+    {
+    	mysqli_query($conn, "insert into equipment_reservation (reservation_description, reservation_quantity, evt_reservation_id, equipment_id) values ('$reservation_description', '$reservation_quantity', '$evt_reservation_id', '$equipment_id')");
+
+    	header('Location: reserve_3.php');
+    }
 }
 
 

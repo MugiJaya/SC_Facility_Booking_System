@@ -47,7 +47,8 @@ if(!isset($_SESSION['session_id']))
     <h1 class="heading">Select Equipment</h1>
     <div class="box-container">
     <?php
-        $sql = "select * from equipment";
+        $facility_id = $_SESSION['facility_id'];
+        $sql = "select e.* from equipment e where e.equipment_id not in (select equipment_id FROM equipment_reservation where evt_reservation_id = (select evt_reservation_id from event_reservation where company_id = (select company_id from company where email = '$session_id') order by evt_reservation_id desc limit 1)) and e.facility_id = '$facility_id'";
         $venues = mysqli_query($conn,$sql) or die(mysqli_error($conn));
         while ($row = mysqli_fetch_assoc($venues)) {
     ?>
@@ -72,9 +73,9 @@ if(!isset($_SESSION['session_id']))
                 <button class="btn" type="submit">Read More</button>
             </form>
             <br>
-            <form action="company_process.php" method="post">
+            <form action="equipment_description.php" method="post">
                 <input type="hidden" name="equipment_id" value="<?php echo $row["equipment_id"]; ?>">
-                <button class="btn" type="submit" name="reservation_3">Choose</button>
+                <button class="btn" type="submit">Choose</button>
             </form>
         </div>
 
@@ -86,7 +87,7 @@ if(!isset($_SESSION['session_id']))
     </div>
 
     <div id="load-more">Load More</div><br>
-    <button id="home" onclick="window.location.href='manage_equipment.php';">Manage Travel Itinerary</button>
+    <button id="home" onclick="window.location.href='manage_equipment.php';">Manage Equipment</button>
         
     <form action="" method="post">                      
         <button id="home" type="submit" name="finish">Finish</button>
@@ -95,7 +96,7 @@ if(!isset($_SESSION['session_id']))
     <?php
         if(isset($_POST['finish']))
         {
-            $test_spot ="SELECT * FROM travel_itinerary WHERE tripID = '$last_id';";
+            $test_spot ="select * from travel_itinerary where tripID = '$last_id';";
             $result_spot = mysqli_query($conn, $test_spot);
 
             $row = mysqli_num_rows($result_spot);
