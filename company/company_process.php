@@ -171,5 +171,27 @@ if (isset($_POST['remove']))
     header('Location: manage_equipment.php');
 }
 
+if (isset($_POST['payment'])) 
+{
+    $evt_reservation_id = $_POST['evt_reservation_id'];
+    $price = $_POST['price'];
+
+    mysqli_query($conn, "insert into payment (payment_amount) values ('$price')");
+
+    mysqli_query($conn, "update event_reservation set payment_id = (select max(payment_id) from payment) where evt_reservation_id = '$evt_reservation_id'");
+
+    header('Location: history_reserve.php');
+}
+
+if (isset($_POST['rate'])) 
+{
+    $rating = $_POST['rating'];
+    $feedback = $_POST['feedback'];
+
+    mysqli_query($conn, "update event_reservation set payment_id = (select max(payment_id) from payment) where evt_reservation_id = '$evt_reservation_id'");
+
+    header('Location: history_reserve.php');
+}
+
 
 ?>

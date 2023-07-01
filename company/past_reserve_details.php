@@ -203,7 +203,7 @@ if(!isset($_SESSION['session_id']))
   ?>
 </section>
     
-<div id="back"><a href="pending_reserve.php">Back</a></div>
+<div id="back"><a href="history_reserve.php">Back</a></div>
 
 </body>
 </html>

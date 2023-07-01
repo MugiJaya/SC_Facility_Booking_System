@@ -8,7 +8,7 @@ if(!isset($_SESSION['session_id']))
 
 <!DOCTYPE html>
 <html>
-  <title>Pending Reservations</title>
+  <title>Reservation History</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="company_css_1.css">
@@ -44,11 +44,11 @@ if(!isset($_SESSION['session_id']))
 <div>
   <section class="container" id="c1">
 
-  <h1 class="related">Pending Admin Approval</h1>
+  <h1 class="related">Upcoming Events</h1>
   <hr>
   <?php
-  $pending_reservations = "select * from event_reservation as er join company as c on er.company_id = c.company_id join facility as f on er.facility_id = f.facility_id where c.email = '$session_id' and er.approval_status = 'Pending'";
-  $result = mysqli_query($conn,$pending_reservations) or die(mysqli_error($conn));
+  $upcoming_events = "select * from event_reservation as er join company as c on er.company_id = c.company_id join facility as f on er.facility_id = f.facility_id where c.email = '$session_id' and er.approval_status = 'Approved' and er.reservation_start_time > NOW();";
+  $result = mysqli_query($conn,$upcoming_events) or die(mysqli_error($conn));
   if(mysqli_num_rows($result) > 0){
   ?>
 
@@ -76,7 +76,7 @@ if(!isset($_SESSION['session_id']))
         ?>
         </p>
 
-        <form action="pending_reserve_details.php" method="post">
+        <form action="upcoming_reserve_details.php" method="post">
           <input type="hidden" name="evt_reservation_id" value="<?php echo $row["evt_reservation_id"]; ?>">           
           <button class="btn" type="submit">View Details</button>
         </form>
@@ -132,11 +132,11 @@ if(!isset($_SESSION['session_id']))
 
   <section class="container" id="c0">
 
-  <h1 class="related">Approved For Payment</h1>
+  <h1 class="related">Past Events</h1>
   <hr>
   <?php
-  $pending_payment = "select * from event_reservation AS er join company as c on er.company_id = c.company_id join facility as f on er.facility_id = f.facility_id where c.email = '$session_id' and er.approval_status = 'Approved' and er.payment_id is NULL;";
-  $result = mysqli_query($conn,$pending_payment) or die(mysqli_error($conn));
+  $past_events = "select * from event_reservation as er join company as c on er.company_id = c.company_id join facility as f on er.facility_id = f.facility_id where c.email = '$session_id' and er.approval_status = 'Approved' and er.reservation_start_time < NOW();";
+  $result = mysqli_query($conn,$past_events) or die(mysqli_error($conn));
         
   if(mysqli_num_rows($result) >0)
   {
@@ -166,16 +166,15 @@ if(!isset($_SESSION['session_id']))
         ?>
         </p>
 
-        <form action="pending_reserve_details.php" method="post">
-          <input type="hidden" name="evt_reservation_id" value="<?php echo $row["evt_reservation_id"]; ?>">           
-          <button class="btn" type="submit">View Details</button>
+        <form action="rating.php" method="post">
+          <input type="hidden" name="tripID" value="<?php echo $row["evt_reservation_id"]; ?>">           
+          <button class="btn" type="submit">Rate</button>
         </form>
         <br>
 
-        <form action="payment.php" method="post">
-          <input type="hidden" name="evt_reservation_id" value="<?php echo $row["evt_reservation_id"]; ?>">
-          <input type="hidden" name="price" value="<?php echo $row["price"]; ?>">          
-          <button class="btn" type="submit">Payment</button>
+        <form action="past_reserve_details.php" method="post">
+          <input type="hidden" name="evt_reservation_id" value="<?php echo $row["evt_reservation_id"]; ?>">           
+          <button class="btn" type="submit">View Details</button>
         </form>
 
         <div class="icons">

@@ -20,13 +20,13 @@
 	flex-direction: column;
 }
 
-.reservation .trip{
+.reservation .reserve{
 	font-size: 30px;
     text-align: center;
 }
 
 .reservation .cards{
-	height: 300px;
+	height: 400px;
 	border: 2px solid lightgray;
 	margin: 20px;
 	display: flex;
@@ -44,7 +44,7 @@
 }
 
 .reservation .cards .caption p{
-	font-size: 20px;
+	font-size: 15px;
 }
 
 .details{
@@ -55,13 +55,13 @@
 	flex-direction: column;
 }
 
-.details .trip{
+.details .reserve{
 	font-size: 30px;
     text-align: center;
 }
 
 .details .cards{
-	height: 300px;
+	height: 500px;
 	border: 2px solid lightgray;
 	margin: 20px;
 	display: flex;
@@ -78,7 +78,7 @@
 }
 
 .details .cards .caption{
-	line-height: 3em;
+	line-height: 2em;
 	margin-left: 30px;
 	position: relative;
 	width: 75%;
@@ -89,7 +89,7 @@
 }
 
 .details .cards .caption p{
-	font-size: 1.5rem;
+	font-size: 0.9rem;
 }
 
 .details .cards .caption button{
