@@ -12,6 +12,7 @@ if(!isset($_SESSION['session_id']))
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="company_css_1.css">
+  <link rel="stylesheet" href="venues_css.css">
 <style>
 
 </style>
@@ -40,8 +41,184 @@ if(!isset($_SESSION['session_id']))
   </div>
 </div>
 
-<div style="padding-left:20px">
-  <h1>PENDING</h1>
+<div>
+  <section class="container" id="c1">
+
+  <h1 class="related">Pending Admin Approval</h1>
+  <hr>
+  <?php
+  $pending_reservations = "select * from event_reservation AS er join company as c on er.company_id = c.company_id join facility as f on er.facility_id = f.facility_id where c.email = '$session_id' and er.approval_status = 'Pending';";
+  $result = mysqli_query($conn,$pending_reservations) or die(mysqli_error($conn));
+  if(mysqli_num_rows($result) > 0){
+  ?>
+
+  <div class="box-container" id="box-container">
+  <?php
+  while ($row = mysqli_fetch_assoc($result)) {
+  ?>
+
+    <div class="box" id="box">
+      <div class="image">
+      <?php 
+        echo '<img src="data:image/jpeg;base64,'.base64_encode($row['facility_image']).'"/>';
+      ?>
+      </div>
+
+      <div class="content">
+        <h3>
+        <?php 
+          echo $row["facility_name"];     
+        ?>  
+        </h3>
+        <p>
+        <?php 
+          echo $row["reservation_purpose"]; 
+        ?>
+        </p>
+
+        <form action="pending_reserve_details.php" method="post">
+          <input type="hidden" name="evt_reservation_id" value="<?php echo $row["evt_reservation_id"]; ?>">           
+          <button class="btn" type="submit">View Details</button>
+        </form>
+
+        <div class="icons">
+          <span><i class="fa fa-calendar"></i><?php echo $row["reservation_start_time"]?></span>
+          <span><i class="fa fa-tag"></i><?php echo $row["price"]?></span>
+          <span><i class="fa fa-user"></i><?php echo $row["facility_capacity"];?> </span>
+        </div>
+      </div>
+    </div>
+
+    <?php
+      }
+    ?>
+
+  </div>
+  <div class="btn-load" id="load-more"> Load More </div><br>
+  </div>
+
+  <script>
+    let loadMoreBtn = document.querySelector('#load-more');
+    let currentItem = 3;
+
+    loadMoreBtn.onclick = () =>{
+      let boxes = [...document.querySelectorAll('#c1 #box-container #box')];
+      for (var i = currentItem; i < currentItem + 3; i++)
+      {
+        boxes[i].style.display = 'inline-block';
+      }
+      currentItem += 3;
+
+      if(currentItem >= boxes.length)
+      {
+        loadMoreBtn.style.display = 'none';
+      }
+    }
+  </script>
+
+  <?php  
+    }
+    else
+    {
+  ?>
+  
+  <h2 style="text-align: center;">--No Record Found--</h2>
+
+  <?php
+    }
+  ?>
+
+  </section>
+
+  <section class="container" id="c0">
+
+  <h1 class="related">Approved For Payment</h1>
+  <hr>
+  <?php
+  $pending_payment = "select * from event_reservation AS er join company as c on er.company_id = c.company_id join facility as f on er.facility_id = f.facility_id where c.email = '$session_id' and er.approval_status = 'Approved' and er.payment_id is NULL;";
+  $result = mysqli_query($conn,$pending_payment) or die(mysqli_error($conn));
+        
+  if(mysqli_num_rows($result) >0)
+  {
+  ?>
+
+  <div class="box-container" id="box-container">
+  <?php
+  while ($row = mysqli_fetch_assoc($result)) {
+  ?>
+
+    <div class="box" id="box">
+      <div class="image">
+      <?php 
+        echo '<img src="data:image/jpeg;base64,'.base64_encode($row['facility_image']).'"/>';
+      ?>
+      </div>
+
+      <div class="content">
+        <h3>
+        <?php 
+          echo $row["facility_name"];     
+        ?>  
+        </h3>
+        <p>
+        <?php 
+          echo $row["reservation_purpose"]; 
+        ?>
+        </p>
+
+        <form action="pending_reserve_details.php" method="post">
+          <input type="hidden" name="evt_reservation_id" value="<?php echo $row["evt_reservation_id"]; ?>">           
+          <button class="btn" type="submit">View Details</button>
+        </form>
+
+        <div class="icons">
+          <span><i class="fa fa-calendar"></i><?php echo $row["reservation_start_time"]?></span>
+          <span><i class="fa fa-tag"></i><?php echo $row["price"]?></span>
+          <span><i class="fa fa-user"></i><?php echo $row["facility_capacity"];?> </span>
+        </div>
+      </div>
+    </div>
+
+    <?php
+      }
+    ?>
+
+  </div>
+  <div class="btn-load" id="load-more"> Load More </div><br>
+  </div>
+
+  <script>
+    let loadMoreBtn = document.querySelector('#load-more');
+    let currentItem = 3;
+
+    loadMoreBtn.onclick = () =>{
+      let boxes = [...document.querySelectorAll('#c1 #box-container #box')];
+      for (var i = currentItem; i < currentItem + 3; i++)
+      {
+        boxes[i].style.display = 'inline-block';
+      }
+      currentItem += 3;
+
+      if(currentItem >= boxes.length)
+      {
+        loadMoreBtn.style.display = 'none';
+      }
+    }
+  </script>
+
+  <?php  
+    }
+    else
+    {
+  ?>
+  
+  <h2 style="text-align: center;">--No Record Found--</h2>
+
+  <?php
+    }
+  ?>
+
+  </section>
 </div>
 
 </body>

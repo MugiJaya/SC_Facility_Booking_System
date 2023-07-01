@@ -136,7 +136,7 @@ if (isset($_POST['reservation_2']))
     $company_id_row = mysqli_fetch_assoc($company_id_query);
     $company_id = $company_id_row['company_id'];
 
-    mysqli_query($conn, "insert into event_reservation (reservation_start_time, reservation_end_time, reservation_purpose, event_type, request, facility_id, company_id) values ('$reservation_start_time', '$reservation_end_time', '$reservation_purpose', '$event_type', '$request', '$facility_id', '$company_id')");
+    mysqli_query($conn, "insert into event_reservation (reservation_start_time, reservation_end_time, reservation_purpose, event_type, request, approval_status, facility_id, company_id) values ('$reservation_start_time', '$reservation_end_time', '$reservation_purpose', '$event_type', '$request', 'Pending', '$facility_id', '$company_id')");
 
     $_SESSION['facility_id'] = $facility_id;
     header('Location: reserve_3.php');
