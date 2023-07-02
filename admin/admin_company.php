@@ -227,6 +227,7 @@ if (isset($_GET['edit'])) {
           <option value="<?php echo $verification_status;?>" hidden><?php echo $verification_status; ?></option>
           <option value="">--- No Value ---</option>
           <option value="Approved">Approved</option>
+          <option value="Pending">Pending</option>
           <option value="Declined">Declined</option>
         </select>
       </td>

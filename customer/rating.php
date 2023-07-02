@@ -1,4 +1,4 @@
-<?php  include('company_process.php');
+<?php  include('customer_process.php');
 //redirecting to login page
 if(!isset($_SESSION['session_id']))
 {
@@ -11,7 +11,7 @@ if(!isset($_SESSION['session_id']))
   <title>Reservation History</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="company_css_1.css">
+  <link rel="stylesheet" href="customer_css_1.css">
   <link rel="stylesheet" href="rating_css.css">
 <style>
 
@@ -50,12 +50,12 @@ if(!isset($_SESSION['session_id']))
 
   <div class="caption">
     <?php
-    $evt_reservation_id = $_POST['evt_reservation_id'];
-    $pending_rating = "select * from event_reservation where evt_reservation_id = '$evt_reservation_id'";
+    $booking_id = $_POST['booking_id'];
+    $pending_rating = "select * from booking where booking_id = '$booking_id'";
     $result = mysqli_query($conn,$pending_rating) or die(mysqli_error($conn));
     while ($row = mysqli_fetch_assoc($result)) {
     ?>
-    <form action="company_process.php" method="POST">
+    <form action="customer_process.php" method="POST">
 
       <label>Score:</label><br>
       <select name="rating">
@@ -71,7 +71,7 @@ if(!isset($_SESSION['session_id']))
       <textarea rows="5" cols="100" name="feedback" placeholder="Feedback"></textarea>
       <br><br>
 
-      <input type="hidden" name="evt_reservation_id" value="<?php echo $evt_reservation_id; ?>">
+      <input type="hidden" name="booking_id" value="<?php echo $booking_id; ?>">
       <button type="submit" name="rate" class="btn">Submit</button>
 
     </form>

@@ -6,30 +6,22 @@ if(!isset($_SESSION['session_id']))
 }
 //fetch the record to update 
 if (isset($_GET['edit'])) {
-    $evt_reservation_id = $_GET['edit'];
+    $customer_id = $_GET['edit'];
     $update = true;
-    $record = mysqli_query($conn, "select ersv.*, com.*, fac.*, pay.* from event_reservation ersv inner join company com on ersv.company_id = com.company_id inner join facility fac on ersv.facility_id = fac.facility_id left join payment pay on ersv.payment_id = pay.payment_id where evt_reservation_id = $evt_reservation_id");
+    $record = mysqli_query($conn, "select * from customer where customer_id = $customer_id");
     if (count($record) == 1 ) 
     {
       $n = mysqli_fetch_array($record);
 
-      $reservation_time = $n['reservation_time'];
-      $reservation_start_time = $n['reservation_start_time'];
-      $reservation_end_time = $n['reservation_end_time'];
-      $reservation_purpose = $n['reservation_purpose'];
-      $event_type = $n['event_type'];
-      $request = $n['request'];
-      $approval_status = $n['approval_status'];
-      $rating = $n['rating'];
-      $feedback = $n['feedback'];
-      $company_id = $n['company_id'];
-      $company_name = $n['company_name'];
-      $client_name = $n['client_name'];
-      $facility_id = $n['facility_id'];
-      $facility_name = $n['facility_name'];
-      $payment_id = $n['payment_id'];
-      $payment_amount = $n['payment_amount'];
-      $payment_time = $n['payment_time'];
+      $customer_name = $n['customer_name'];
+      $dob = $n['dob'];
+      $gender = $n['gender'];
+      $address = $n['address'];
+      $contact_no = $n['contact_no'];
+      $email = $n['email'];
+      $password = $n['password'];
+      $verification_status = $n['verification_status'];
+      $admin_id = $n['admin_id'];
     }
   }
 ?>
@@ -38,7 +30,7 @@ if (isset($_GET['edit'])) {
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin / Event Approval</title>
+  <title>Admin / Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="admin_css_1.css">
@@ -55,7 +47,7 @@ if (isset($_GET['edit'])) {
       position: fixed;
       left: 0;
       right: 0;
-      height: 35%;    
+      height: 30%;    
       top: 0;
       margin-left: 150px;
       background-color: lavender;
@@ -66,7 +58,7 @@ if (isset($_GET['edit'])) {
       position: fixed;
       left: 0;
       right: 0;
-      height: 65%;
+      height: 70%;
       bottom: 0;
       margin-left: 150px;
       background-color: lavender;
@@ -105,14 +97,14 @@ if (isset($_GET['edit'])) {
     <a href="admin_company_approval.php">Account Approval</a>
   </div>
   <!-- ------------------ Booking ------------------ -->
-  <button style="color: ivory; background-color: cornflowerblue;" class="dropdown-btn">Booking 
+  <button class="dropdown-btn">Booking 
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
     <a href="admin_booking.php">Booking Information</a>
     <a href="admin_booking_approval.php">Booking Approval</a>
     <a href="admin_event.php">Event Reservation Information</a>
-    <a class="active" href="admin_event_approval.php">Event Reservation Approval</a>
+    <a href="admin_event_approval.php">Event Reservation Approval</a>
   </div>
   <!-- ------------------ Facility ------------------ -->
   <button class="dropdown-btn">Facility 
@@ -132,11 +124,11 @@ if (isset($_GET['edit'])) {
     <a href="admin_add_equipment.php">Add Equipment</a>
   </div>
   <!-- ------------------ Report ------------------ -->
-  <button class="dropdown-btn">Report 
+  <button style="color: ivory; background-color: cornflowerblue;" class="dropdown-btn">Report 
     <i class="fa fa-caret-down"></i>
   </button>
   <div class="dropdown-container">
-    <a href="admin_report.php">Report</a>
+    <a class="active" href="admin_report.php">Report</a>
   </div>
   <!-- ------------------ Logout ------------------ -->
   <br><br>
@@ -162,82 +154,65 @@ if (isset($_GET['edit'])) {
   <form method="post" action="admin_process.php" enctype="multipart/form-data">
     <tr>
       <td>
-        <label>Event Reservation ID:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="evt_reservation_id" value="<?php echo $evt_reservation_id; ?>" readonly>
+        <label>Customer ID:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="customer_id" value="<?php echo $customer_id; ?>" readonly>
       </td>
       <td>
-        <label>Reservation Time:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="reservation_time" value="<?php echo $reservation_time; ?>" readonly>
-      </td>
+        <label>Customer Name:</label><br>
+        <input class="input2" type="text" name="customer_name" value="<?php echo $customer_name; ?>">
+      </td>     
       <td>
-        <label>Reservation Start Time:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="datetime-local" name="reservation_start_time" value="<?php echo $reservation_start_time; ?>" readonly>
+        <label>Date of Birth:</label><br>
+        <input class="input2" type="date" name="dob" value="<?php echo $dob; ?>">
       </td> 
       <td>
-        <label>Reservation End Time:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="datetime-local" name="reservation_end_time" value="<?php echo $reservation_end_time; ?>" readonly>
+        <label>Gender:</label><br>
+        <select class="input2" name="gender"> 
+          <option value="<?php echo $gender;?>" hidden><?php echo $gender; ?></option>
+          <option value="">--- No Value ---</option>
+          <option value="M">M</option>
+          <option value="F">F</option>
+        </select>
+      </td> 
+    </tr>
+    <tr>
+      <td>
+        <label>Address:</label><br>
+        <input class="input2" type="text" name="address" value="<?php echo $address; ?>">
+      </td> 
+      <td>
+        <label>Contact No.:</label><br>
+        <input class="input2" type="text" name="contact_no" value="<?php echo $contact_no; ?>">
+      </td>  
+      <td>
+        <label>Email:</label><br>
+        <input class="input2" type="text" name="email" value="<?php echo $email; ?>">
+      </td>
+      <td>
+        <label>Password:</label><br>
+        <input class="input2" type="text" name="password" value="<?php echo $password; ?>">
       </td>
     </tr>
     <tr>
       <td>
-        <label>Reservation Purpose:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="reservation_purpose" value="<?php echo $reservation_purpose; ?>" readonly>
-      </td>
-      <td>
-        <label>Event Type:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="event_type" value="<?php echo $event_type; ?>" readonly>
-      </td> 
-      <td>
-        <label>Request:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="request" value="<?php echo $request; ?>" readonly>
-      </td> 
-      <td>
-        <label>Approval Status:</label><br>
-        <select class="input2" name="approval_status"> 
-          <option value="<?php echo $approval_status;?>" hidden><?php echo $approval_status; ?></option>
+        <label>Verification Status:</label><br>
+        <select class="input2" name="verification_status"> 
+          <option value="<?php echo $verification_status;?>" hidden><?php echo $verification_status; ?></option>
           <option value="">--- No Value ---</option>
           <option value="Approved">Approved</option>
           <option value="Pending">Pending</option>
           <option value="Declined">Declined</option>
         </select>
       </td>
-    </tr>
-    <tr>
       <td>
-        <label>Rating:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="rating" value="<?php echo $rating; ?>" readonly>
-      </td>  
-      <td>
-        <label>Feedback:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="feedback" value="<?php echo $feedback; ?>" readonly>
+        <label>Admin ID:</label><br>
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="admin_id" value="<?php echo $admin_id; ?>" readonly>
       </td>
-      <td>
-        <label>Company ID:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="company_id" value="<?php echo $company_id; ?>" readonly>
-      </td>
-      <td>
-        <label>Company Name:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="company_name" value="<?php echo $company_name; ?>" readonly>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label>Client Name:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="client_name" value="<?php echo $client_name; ?>" readonly>
-      </td>
-      <td>
-        <label>Facility ID:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="facility_id" value="<?php echo $facility_id; ?>" readonly>
-      </td>
-      <td>
-        <label>Facility Name:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="facility_name" value="<?php echo $facility_name; ?>" readonly>
-      </td>
-    </tr>
+    </tr>  
     <tr>
       <td colspan="4">
         <?php if ($update == true): ?>
-        <button class="btn" type="submit" name="update8" >Update</button>
+        <button class="btn" type="submit" name="update" >Update</button>
         <?php else: ?>
         <p></p>
         <?php endif ?>
@@ -251,7 +226,7 @@ if (isset($_GET['edit'])) {
 
 
 <?php
-$query = "select ersv.*, com.*, fac.*, pay.* from event_reservation ersv inner join company com on ersv.company_id = com.company_id inner join facility fac on ersv.facility_id = fac.facility_id left join payment pay on ersv.payment_id = pay.payment_id where ersv.approval_status != 'Approved'";
+$query = "select * from customer where verification_status = 'Approved'";
 $search_result = filterTable($query);
 
 // function to connect and execute the query
@@ -273,64 +248,52 @@ function filterTable($query)
   <thead>
     <tr>
       <th>#</th>
-      <th>Event Reservation ID</th>
-      <th>Reservation Time</th>
-      <th>Reservation Start Time</th>
-      <th>Reservation End Time</th>
-      <th>Reservation Purpose</th>
-      <th>Event Type</th>
-      <th>Request</th>
-      <th>Approval Status</th>
-      <th>Rating</th>
-      <th>Feedback</th>
-      <th>Company ID</th>
-      <th>Company Name</th>
-      <th>Client Name</th>
-      <th>Facility ID</th>
-      <th>Facility Name</th>
+      <th>Profile Picture</th>
+      <th>Customer ID</th>
+      <th>Customer Name</th>
+      <th>DOB</th>
+      <th>Gender</th>
+      <th>Address</th>
+      <th>Contact No.</th>
+      <th>Email</th>
+      <th>Password</th>
+      <th>Verification Status</th>
+      <th>Admin ID</th>
     </tr>
   </thead>
   <tfoot>
     <tr>
       <th id='no'>#</th>
-      <th id='in'>Event Reservation ID</th>
-      <th id='in'>Reservation Time</th>
-      <th id='in'>Reservation Start Time</th>
-      <th id='in'>Reservation End Time</th>
-      <th id='in'>Reservation Purpose</th>
-      <th id='in'>Event Type</th>
-      <th id='in'>Request</th>
-      <th id='in'>Approval Status</th>
-      <th id='in'>Rating</th>
-      <th id='in'>Feedback</th>
-      <th id='in'>Company ID</th>
-      <th id='in'>Company Name</th>
-      <th id='in'>Client Name</th>
-      <th id='in'>Facility ID</th>
-      <th id='in'>Facility Name</th>
+      <th id='no'>Profile Picture</th>
+      <th id='in'>Customer ID</th>
+      <th id='in'>Customer Name</th>
+      <th id='in'>DOB</th>
+      <th id='in'>Gender</th>
+      <th id='in'>Address</th>
+      <th id='in'>Contact No.</th>
+      <th id='in'>Email</th>
+      <th id='in'>Password</th>
+      <th id='in'>Verification Status</th>
+      <th id='in'>Admin ID</th>
     </tr>
   </tfoot>
   <tbody>
     <?php while($row = mysqli_fetch_array($search_result)):?>    
-    <tr class="breakrow" onclick="location.href='admin_event_approval.php?edit=<?php echo $row['evt_reservation_id']; ?>'">
+    <tr class="breakrow" onclick="location.href='admin_customer.php?edit=<?php echo $row['customer_id']; ?>'">
       <td>
-        <a title="Edit" href="admin_event_approval.php?edit=<?php echo $row['evt_reservation_id']; ?>" class="edit_btn" >✏️</a>
+        <a title="Edit" href="admin_customer.php?edit=<?php echo $row['customer_id']; ?>" class="edit_btn" >✏️</a>
       </td>
-      <td><?php echo $row['evt_reservation_id'];?></td>
-      <td><?php echo $row['reservation_time'];?></td>
-      <td><?php echo $row['reservation_start_time'];?></td>
-      <td><?php echo $row['reservation_end_time'];?></td>
-      <td><?php echo $row['reservation_purpose'];?></td>
-      <td><?php echo $row['event_type'];?></td>
-      <td><?php echo $row['request'];?></td>
-      <td><?php echo $row['approval_status'];?></td>
-      <td><?php echo $row['rating'];?></td>
-      <td><?php echo $row['feedback'];?></td>
-      <td><?php echo $row['company_id'];?></td>
-      <td><?php echo $row['company_name'];?></td>
-      <td><?php echo $row['client_name'];?></td>
-      <td><?php echo $row['facility_id'];?></td>
-      <td><?php echo $row['facility_name'];?></td>
+      <td><?php echo '<img src="data:image/jpeg;base64,'.base64_encode($row['profile_picture'] ).'" height="150" width="150" class="img-thumnail" />' ?></td>
+      <td><?php echo $row['customer_id'];?></td>
+      <td><?php echo $row['customer_name'];?></td>                  
+      <td><?php echo $row['dob'];?></td>
+      <td><?php echo $row['gender'];?></td>
+      <td><?php echo $row['address'];?></td>
+      <td><?php echo $row['contact_no'];?></td>
+      <td><?php echo $row['email'];?></td>
+      <td><?php echo $row['password'];?></td>
+      <td><?php echo $row['verification_status'];?></td>
+      <td><?php echo $row['admin_id'];?></td>
     </tr>   
     <?php endwhile;?>
   </tbody>

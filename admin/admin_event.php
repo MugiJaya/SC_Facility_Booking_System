@@ -29,7 +29,6 @@ if (isset($_GET['edit'])) {
       $facility_name = $n['facility_name'];
       $payment_id = $n['payment_id'];
       $payment_amount = $n['payment_amount'];
-      $payment_date = $n['payment_date'];
       $payment_time = $n['payment_time'];
     }
   }
@@ -198,6 +197,7 @@ if (isset($_GET['edit'])) {
           <option value="<?php echo $approval_status;?>" hidden><?php echo $approval_status; ?></option>
           <option value="">--- No Value ---</option>
           <option value="Approved">Approved</option>
+          <option value="Pending">Pending</option>
           <option value="Declined">Declined</option>
         </select>
       </td>
@@ -241,15 +241,11 @@ if (isset($_GET['edit'])) {
       </td> 
       <td>
         <label>Payment Amount:</label><br>
-        <input class="input2" type="text" name="payment_amount" value="<?php echo $payment_amount; ?>">
-      </td>  
-      <td>
-        <label>Payment Date:</label><br>
-        <input class="input2" type="date" name="payment_date" value="<?php echo $payment_date; ?>">
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="payment_amount" value="<?php echo $payment_amount; ?>" readonly>
       </td>
       <td>
         <label>Payment Time:</label><br>
-        <input class="input2" type="text" name="payment_time" value="<?php echo $payment_time; ?>">
+        <input style="background-color: #e6e6e6;" class="input2" type="text" name="payment_time" value="<?php echo $payment_time; ?>" readonly>
       </td>
     </tr>
     <tr>
@@ -308,7 +304,6 @@ function filterTable($query)
       <th>Facility Name</th>
       <th>Payment ID</th>
       <th>Payment Amount</th>
-      <th>Payment Date</th>
       <th>Payment Time</th>
     </tr>
   </thead>
@@ -332,7 +327,6 @@ function filterTable($query)
       <th id='in'>Facility Name</th>
       <th id='in'>Payment ID</th>
       <th id='in'>Payment Amount</th>
-      <th id='in'>Payment Date</th>
       <th id='in'>Payment Time</th>
     </tr>
   </tfoot>
@@ -359,7 +353,6 @@ function filterTable($query)
       <td><?php echo $row['facility_name'];?></td>
       <td><?php echo $row['payment_id'];?></td>
       <td><?php echo $row['payment_amount'];?></td>
-      <td><?php echo $row['payment_date'];?></td>
       <td><?php echo $row['payment_time'];?></td>
     </tr>   
     <?php endwhile;?>

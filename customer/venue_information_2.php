@@ -1,4 +1,4 @@
-<?php  include('company_process.php');
+<?php  include('customer_process.php');
 //redirecting to login page
 if(!isset($_SESSION['session_id']))
 {
@@ -11,7 +11,7 @@ if(!isset($_SESSION['session_id']))
   <title>Venue Information</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="company_css_1.css">
+  <link rel="stylesheet" href="customer_css_1.css">
   <link rel="stylesheet" href="venue_information_css.css">
 <style>
 

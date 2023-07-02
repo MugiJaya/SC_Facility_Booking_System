@@ -26,7 +26,6 @@ if (isset($_GET['edit'])) {
       $facility_name = $n['facility_name'];
       $payment_id = $n['payment_id'];
       $payment_amount = $n['payment_amount'];
-      $payment_date = $n['payment_date'];
       $payment_time = $n['payment_time'];
     }
   }
@@ -187,6 +186,7 @@ if (isset($_GET['edit'])) {
           <option value="<?php echo $approval_status;?>" hidden><?php echo $approval_status; ?></option>
           <option value="">--- No Value ---</option>
           <option value="Approved">Approved</option>
+          <option value="Pending">Pending</option>
           <option value="Declined">Declined</option>
         </select>
       </td> 

@@ -47,7 +47,6 @@ $facility_id = "";
 $facility_name = "";
 $payment_id = "";
 $payment_amount = "";
-$payment_date = "";
 $payment_time = "";
 $booking_id = 0;
 
@@ -68,7 +67,6 @@ $facility_id = "";
 $facility_name = "";
 $payment_id = "";
 $payment_amount = "";
-$payment_date = "";
 $payment_time = "";
 $evt_reservation_id = 0;
 
@@ -85,7 +83,7 @@ $facility_id = 0;
 /*----------------Equipment---------------*/
 $equipment_name = "";
 $eqiupment_type = "";
-$quantity	 = "";
+$quantity = "";
 $description = "";
 $file = "";
 $facility_id = "";
@@ -168,15 +166,6 @@ if (isset($_POST['update2']))
 }
 
 
-if (isset($_GET['delete2'])) 
-{
-	$customer_id = $_GET['delete2'];
-	mysqli_query($conn, "delete from customer where customer_id = $customer_id");
-	$_SESSION['msg'] = "Deleted!"; 
-	header('location: admin_customer_approval.php');
-}
-
-
 /*------------------------------------------------------------COMPANY------------------------------------------------------------*/
 
 
@@ -234,15 +223,6 @@ if (isset($_POST['update4']))
 }
 
 
-if (isset($_GET['delete4'])) 
-{
-	$company_id = $_GET['delete4'];
-	mysqli_query($conn, "delete from company where company_id = $company_id");
-	$_SESSION['msg'] = "Deleted!"; 
-	header('location: admin_company_approval.php');
-}
-
-
 /*------------------------------------------------------------BOOKING------------------------------------------------------------*/
 
 
@@ -262,12 +242,11 @@ if (isset($_POST['update5']))
     $facility_name = $_POST['facility_name'];
     $payment_id = $_POST['payment_id'];
     $payment_amount = $_POST['payment_amount'];
-    $payment_date = $_POST['payment_date'];
     $payment_time = $_POST['payment_time'];
 	
 	mysqli_query($conn, "update booking set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', approval_status='$approval_status', rating='$rating', feedback='$feedback' where booking_id=$booking_id");
 
-	mysqli_query($conn, "update payment set payment_amount='$payment_amount', payment_date='$payment_date', payment_time='$payment_time' where payment_id=$payment_id");
+	mysqli_query($conn, "update payment set payment_amount='$payment_amount', payment_time='$payment_time' where payment_id=$payment_id");
 
 	$_SESSION['msg'] = "Updated!"; 
 	header('location: admin_booking.php');
@@ -290,7 +269,6 @@ if (isset($_POST['update6']))
     $facility_name = $_POST['facility_name'];
     $payment_id = $_POST['payment_id'];
     $payment_amount = $_POST['payment_amount'];
-    $payment_date = $_POST['payment_date'];
     $payment_time = $_POST['payment_time'];
 	
 	mysqli_query($conn, "update booking set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', approval_status='$approval_status' where booking_id=$booking_id");
@@ -319,12 +297,11 @@ if (isset($_POST['update7']))
     $facility_name = $_POST['facility_name'];
     $payment_id = $_POST['payment_id'];
     $payment_amount = $_POST['payment_amount'];
-    $payment_date = $_POST['payment_date'];
     $payment_time = $_POST['payment_time'];
 	
 	mysqli_query($conn, "update event_reservation set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', event_type='$event_type', request='$request', approval_status='$approval_status', rating='$rating', feedback='$feedback' where evt_reservation_id=$evt_reservation_id");
 
-	mysqli_query($conn, "update payment set payment_amount='$payment_amount', payment_date='$payment_date', payment_time='$payment_time' where payment_id=$payment_id");
+	mysqli_query($conn, "update payment set payment_amount='$payment_amount', payment_time='$payment_time' where payment_id=$payment_id");
 
 	$_SESSION['msg'] = "Updated!"; 
 	header('location: admin_event.php');
@@ -350,7 +327,6 @@ if (isset($_POST['update8']))
     $facility_name = $_POST['facility_name'];
     $payment_id = $_POST['payment_id'];
     $payment_amount = $_POST['payment_amount'];
-    $payment_date = $_POST['payment_date'];
     $payment_time = $_POST['payment_time'];
 	
 	mysqli_query($conn, "update event_reservation set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', event_type='$event_type', request='$request', approval_status='$approval_status', rating='$rating', feedback='$feedback' where evt_reservation_id=$evt_reservation_id");
@@ -416,15 +392,6 @@ if (isset($_POST['update9']))
 }
 
 
-if (isset($_GET['delete9'])) 
-{
-	$facility_id = $_GET['delete9'];
-	mysqli_query($conn, "delete from facility where facility_id = $facility_id");
-	$_SESSION['msg'] = "Deleted!"; 
-	header('location: admin_facility.php');
-}
-
-
 /*------------------------------------------------------------EQUIPMENT------------------------------------------------------------*/
 
 
@@ -475,14 +442,6 @@ if (isset($_POST['update10']))
 		$_SESSION['msg'] = "Updated!"; 
 		header('location: admin_equipment.php');
 	}
-}
-
-if (isset($_GET['delete10'])) 
-{
-	$equipment_id = $_GET['delete10'];
-	mysqli_query($conn, "delete from equipment where equipment_id = $equipment_id");
-	$_SESSION['msg'] = "Deleted!"; 
-	header('location: admin_equipment.php');
 }
 
 

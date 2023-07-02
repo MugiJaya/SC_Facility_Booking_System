@@ -222,6 +222,7 @@ if (isset($_GET['edit'])) {
           <option value="<?php echo $verification_status;?>" hidden><?php echo $verification_status; ?></option>
           <option value="">--- No Value ---</option>
           <option value="Approved">Approved</option>
+          <option value="Pending">Pending</option>
           <option value="Declined">Declined</option>
         </select>
       </td>
@@ -313,7 +314,6 @@ function filterTable($query)
     <tr class="breakrow" onclick="location.href='admin_company_approval.php?edit=<?php echo $row['company_id']; ?>'">
       <td>
         <a title="Edit" href="admin_company_approval.php?edit=<?php echo $row['company_id']; ?>" class="edit_btn" >✏️</a>
-        <a title="Delete" href="#" class="del_btn" onclick="confirmDelete(<?php echo $row['company_id']; ?>)">❌</a>
       </td>
       <td><?php echo '<img src="data:image/jpeg;base64,'.base64_encode($row['profile_picture'] ).'" height="150" width="150" class="img-thumnail" />' ?></td>
       <td><?php echo $row['company_id'];?></td>

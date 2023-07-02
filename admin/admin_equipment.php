@@ -180,7 +180,7 @@ if (isset($_GET['edit'])) {
       <td>
         <label>Facility:</label><br>
         <select class="input2" name="facility_id">
-        <option value="<?php echo $facility_name;?>" hidden><?php echo $facility_name; ?></option>
+        <option value="<?php echo $facility_id;?>" hidden><?php echo $facility_name; ?></option>
         <option value="">--- Select ---</option>
         <?php 
         $sql = mysqli_query($conn, "select * from facility");
@@ -261,7 +261,6 @@ function filterTable($query)
     <tr class="breakrow" onclick="location.href='admin_equipment.php?edit=<?php echo $row['equipment_id']; ?>'">
       <td>
         <a title="Edit" href="admin_equipment.php?edit=<?php echo $row['equipment_id']; ?>" class="edit_btn" >✏️</a>
-        <a title="Delete" href="#" class="del_btn" onclick="confirmDelete(<?php echo $row['equipment_id']; ?>)">❌</a>
       </td>
       <td><?php echo '<img src="data:image/jpeg;base64,'.base64_encode($row['equipment_image'] ).'" height="150" width="150" class="img-thumnail" />' ?></td>
       <td><?php echo $row['equipment_id'];?></td>

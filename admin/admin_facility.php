@@ -253,7 +253,6 @@ function filterTable($query)
     <tr class="breakrow" onclick="location.href='admin_facility.php?edit=<?php echo $row['facility_id']; ?>'">
       <td>
         <a title="Edit" href="admin_facility.php?edit=<?php echo $row['facility_id']; ?>" class="edit_btn" >✏️</a>
-        <a title="Delete" href="#" class="del_btn" onclick="confirmDelete(<?php echo $row['facility_id']; ?>)">❌</a>
       </td>
       <td><?php echo '<img src="data:image/jpeg;base64,'.base64_encode($row['facility_image'] ).'" height="150" width="150" class="img-thumnail" />' ?></td>
       <td><?php echo $row['facility_id'];?></td>

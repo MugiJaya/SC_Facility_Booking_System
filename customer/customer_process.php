@@ -9,19 +9,13 @@ $session_id = $_SESSION['session_id'];
 
 if(isset($_POST['update_profile']))
 {
-   	$client_name = mysqli_real_escape_string($conn, $_POST['client_name']);
+   	$customer_name = mysqli_real_escape_string($conn, $_POST['customer_name']);
    	$email = mysqli_real_escape_string($conn, $_POST['email']);
    	$dob = $_POST['dob'];
    	$contact_no = mysqli_real_escape_string($conn, $_POST['contact_no']);
    	$address = mysqli_real_escape_string($conn, $_POST['address']);
-   
-   	$company_name = mysqli_real_escape_string($conn, $_POST['company_name']);
-   	$company_email = mysqli_real_escape_string($conn, $_POST['company_email']);
-   	$company_contact_no = mysqli_real_escape_string($conn, $_POST['company_contact_no']);
-   	$position = mysqli_real_escape_string($conn, $_POST['position']);
-   	$company_address = mysqli_real_escape_string($conn, $_POST['company_address']);
 
-   	mysqli_query($conn, "update company set client_name='$client_name', dob='$dob', address='$address', contact_no='$contact_no', email='$email', company_name='$company_name', company_address='$company_address', company_contact_no='$company_contact_no', company_email='$company_email', position='$position' where email='$session_id'");
+   	mysqli_query($conn, "update customer set customer_name='$customer_name', dob='$dob', address='$address', contact_no='$contact_no', email='$email' where email='$session_id'");
 
     $_SESSION['session_id'] = $email;
 
@@ -39,7 +33,7 @@ if(isset($_POST['update_profile']))
 				$message[] = 'confirm password not matched!';
 			}
 			else{
-				mysqli_query($conn, "update company set password = '$confirm_pass' where email = '$session_id'");
+				mysqli_query($conn, "update customer set password = '$confirm_pass' where email = '$session_id'");
 				$message[] = 'password updated successfully!';
 			}
 		}
@@ -61,7 +55,7 @@ if(isset($_POST['update_profile']))
 
    			if(in_array($img_ex_lc,$allowed_exs)){
    				$image = addslashes(file_get_contents($update_image_tmp_name));
-   				$image_update_query = mysqli_query($conn, "update company set profile_picture = '$image' where email = '$session_id'");
+   				$image_update_query = mysqli_query($conn, "update customer set profile_picture = '$image' where email = '$session_id'");
 
    				$message[] = 'image updated succssfully!';
    			}
@@ -84,8 +78,6 @@ if (isset($_POST['reservation']))
     $reservation_start_time = $_POST['reservation_start_time'];
     $reservation_end_time = $_POST['reservation_end_time'];
     $reservation_purpose = $_POST['reservation_purpose'];
-    $event_type = $_POST['event_type'];
-    $request = $_POST['request'];
     $current_time = date('Y-m-d\TH:i:s');
 
     $message = [];
@@ -110,17 +102,15 @@ if (isset($_POST['reservation']))
     {
         $message[] = 'Reservation end time cannot be before the start time.';
     }
+    $start_date = date('Y-m-d', strtotime($reservation_start_time));
+    $end_date = date('Y-m-d', strtotime($reservation_end_time));
+    if ($start_date !== $end_date) 
+    {
+        $message[] = 'Reservation start and end times should be on the same day.';
+    }
     if (empty($reservation_purpose)) 
     {
         $message[] = 'Reservation Purpose is Required!';
-    }
-    if (empty($event_type)) 
-    {
-        $message[] = 'Event Type is Required!';
-    }
-    if (empty($request)) 
-    {
-        $message[] = 'Request is Required!';
     }
     if (!empty($message)) 
     {
@@ -132,8 +122,6 @@ if (isset($_POST['reservation']))
     	$_SESSION['reservation_start_time'] = $reservation_start_time;
         $_SESSION['reservation_end_time'] = $reservation_end_time;
         $_SESSION['reservation_purpose'] = $reservation_purpose;
-        $_SESSION['event_type'] = $event_type;
-        $_SESSION['request'] = $request;
         header('Location: reserve_2.php');
     }
 }
@@ -143,68 +131,37 @@ if (isset($_POST['reservation_2']))
 	$reservation_start_time = $_POST['reservation_start_time'];
     $reservation_end_time = $_POST['reservation_end_time'];
     $reservation_purpose = $_POST['reservation_purpose'];
-    $event_type = $_POST['event_type'];
-    $request = $_POST['request'];
     $facility_id = $_POST['facility_id'];
 
-    $company_id_query = mysqli_query($conn, "select company_id from company where email='$session_id'");
-    $company_id_row = mysqli_fetch_assoc($company_id_query);
-    $company_id = $company_id_row['company_id'];
+    $customer_id_query = mysqli_query($conn, "select customer_id from customer where email='$session_id'");
+    $customer_id_row = mysqli_fetch_assoc($customer_id_query);
+    $customer_id = $customer_id_row['customer_id'];
 
-    mysqli_query($conn, "insert into event_reservation (reservation_start_time, reservation_end_time, reservation_purpose, event_type, request, approval_status, facility_id, company_id) values ('$reservation_start_time', '$reservation_end_time', '$reservation_purpose', '$event_type', '$request', 'Pending', '$facility_id', '$company_id')");
+    mysqli_query($conn, "insert into booking (reservation_start_time, reservation_end_time, reservation_purpose, approval_status, facility_id, customer_id) values ('$reservation_start_time', '$reservation_end_time', '$reservation_purpose', 'Pending', '$facility_id', '$customer_id')");
 
-    $_SESSION['facility_id'] = $facility_id;
-    header('Location: reserve_3.php');
-}
-
-if (isset($_POST['reservation_3'])) 
-{
-	$reservation_description = $_POST['reservation_description'];
-    $reservation_quantity = $_POST['reservation_quantity'];
-    $evt_reservation_id = $_POST['evt_reservation_id'];
-    $equipment_id = $_POST['equipment_id'];
-
-    if(empty($reservation_description))
-    {
-        echo "<script>alert('Please fill up description!');</script>";
-        echo "<meta http-equiv='refresh' content='0; url=reserve_3.php'/>";
-    }
-    else
-    {
-    	mysqli_query($conn, "insert into equipment_reservation (reservation_description, reservation_quantity, evt_reservation_id, equipment_id) values ('$reservation_description', '$reservation_quantity', '$evt_reservation_id', '$equipment_id')");
-
-    	header('Location: reserve_3.php');
-    }
-}
-
-if (isset($_POST['remove'])) 
-{
-	$eqp_reservation_id = $_POST['eqp_reservation_id'];
-
-    mysqli_query($conn, "delete from equipment_reservation where eqp_reservation_id = '$eqp_reservation_id'");
-
-    header('Location: manage_equipment.php');
+    echo "<script>alert('The reservation has been placed!\\nPlease wait for the admin\'s approval!');</script>";
+    echo "<meta http-equiv='refresh' content='0; url=pending_reserve.php'/>";
 }
 
 if (isset($_POST['payment'])) 
 {
-    $evt_reservation_id = $_POST['evt_reservation_id'];
+    $booking_id = $_POST['booking_id'];
     $price = $_POST['price'];
 
     mysqli_query($conn, "insert into payment (payment_amount) values ('$price')");
 
-    mysqli_query($conn, "update event_reservation set payment_id = (select max(payment_id) from payment) where evt_reservation_id = '$evt_reservation_id'");
+    mysqli_query($conn, "update booking set payment_id = (select max(payment_id) from payment) where booking_id = '$booking_id'");
 
     header('Location: history_reserve.php');
 }
 
 if (isset($_POST['rate'])) 
 {
-    $evt_reservation_id = $_POST['evt_reservation_id'];
+    $booking_id = $_POST['booking_id'];
     $rating = $_POST['rating'];
     $feedback = $_POST['feedback'];
 
-    mysqli_query($conn, "update event_reservation set rating='$rating', feedback='$feedback' where evt_reservation_id = '$evt_reservation_id'");
+    mysqli_query($conn, "update booking set rating='$rating', feedback='$feedback' where booking_id = '$booking_id'");
 
     header('Location: history_reserve.php');
 }
