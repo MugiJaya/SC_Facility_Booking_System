@@ -81,6 +81,15 @@ if(!isset($_SESSION['session_id']))
         <?php echo $row["request"]?>
       </p>
 
+      <p>
+        <b>Rating:</b>
+        <?php echo $row["rating"]?>
+      </p>
+
+      <p>
+        <b>Feedback:</b>
+        <?php echo $row["feedback"]?>
+      </p>
     </div>
   </div>
   

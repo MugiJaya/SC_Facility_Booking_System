@@ -47,7 +47,7 @@ if(!isset($_SESSION['session_id']))
   <h1 class="related">Upcoming Events</h1>
   <hr>
   <?php
-  $upcoming_events = "select * from event_reservation as er join company as c on er.company_id = c.company_id join facility as f on er.facility_id = f.facility_id where c.email = '$session_id' and er.approval_status = 'Approved' and er.reservation_start_time > NOW();";
+  $upcoming_events = "select * from event_reservation as er join company as c on er.company_id = c.company_id join facility as f on er.facility_id = f.facility_id where c.email = '$session_id' and er.approval_status = 'Approved' and er.reservation_start_time > NOW() and er.payment_id is not NULL;";
   $result = mysqli_query($conn,$upcoming_events) or die(mysqli_error($conn));
   if(mysqli_num_rows($result) > 0){
   ?>
@@ -135,7 +135,7 @@ if(!isset($_SESSION['session_id']))
   <h1 class="related">Past Events</h1>
   <hr>
   <?php
-  $past_events = "select * from event_reservation as er join company as c on er.company_id = c.company_id join facility as f on er.facility_id = f.facility_id where c.email = '$session_id' and er.approval_status = 'Approved' and er.reservation_start_time < NOW();";
+  $past_events = "select * from event_reservation as er join company as c on er.company_id = c.company_id join facility as f on er.facility_id = f.facility_id where c.email = '$session_id' and er.approval_status = 'Approved' and er.reservation_start_time < NOW() and er.payment_id is not NULL;";
   $result = mysqli_query($conn,$past_events) or die(mysqli_error($conn));
         
   if(mysqli_num_rows($result) >0)
@@ -166,11 +166,17 @@ if(!isset($_SESSION['session_id']))
         ?>
         </p>
 
+        <?php
+        if ($row["rating"] === null) {
+        ?>
         <form action="rating.php" method="post">
-          <input type="hidden" name="tripID" value="<?php echo $row["evt_reservation_id"]; ?>">           
+          <input type="hidden" name="evt_reservation_id" value="<?php echo $row["evt_reservation_id"]; ?>">           
           <button class="btn" type="submit">Rate</button>
         </form>
         <br>
+        <?php
+        }
+        ?>
 
         <form action="past_reserve_details.php" method="post">
           <input type="hidden" name="evt_reservation_id" value="<?php echo $row["evt_reservation_id"]; ?>">           
@@ -179,8 +185,7 @@ if(!isset($_SESSION['session_id']))
 
         <div class="icons">
           <span><i class="fa fa-calendar"></i><?php echo $row["reservation_start_time"]?></span>
-          <span><i class="fa fa-tag"></i><?php echo $row["price"]?></span>
-          <span><i class="fa fa-user"></i><?php echo $row["facility_capacity"];?> </span>
+          <span><i class="fa fa-star"></i><?php echo $row["rating"]?></span>
         </div>
       </div>
     </div>

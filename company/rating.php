@@ -49,6 +49,12 @@ if(!isset($_SESSION['session_id']))
 <div class="cards">
 
   <div class="caption">
+    <?php
+    $evt_reservation_id = $_POST['evt_reservation_id'];
+    $pending_reservation_detail = "select * from event_reservation where evt_reservation_id = '$evt_reservation_id'";
+    $result = mysqli_query($conn,$pending_reservation_detail) or die(mysqli_error($conn));
+    while ($row = mysqli_fetch_assoc($result)) {
+    ?>
     <form action="company_process.php" method="POST">
 
       <label>Score:</label><br>
@@ -65,9 +71,13 @@ if(!isset($_SESSION['session_id']))
       <textarea rows="5" cols="100" name="feedback" placeholder="Feedback"></textarea>
       <br><br>
 
+      <input type="hidden" name="evt_reservation_id" value="<?php echo $evt_reservation_id; ?>">
       <button type="submit" name="rate" class="btn">Submit</button>
 
     </form>
+    <?php 
+    }
+    ?>
   </div>
 
 </div>

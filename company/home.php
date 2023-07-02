@@ -12,6 +12,7 @@ if(!isset($_SESSION['session_id']))
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="company_css_1.css">
+  <link rel="stylesheet" href="home_css.css">
 <style>
 
 </style>
@@ -40,9 +41,57 @@ if(!isset($_SESSION['session_id']))
   </div>
 </div>
 
-<div style="padding-left:20px">
-  <h1>Home</h1>
+
+<div class="container">
+  <div class="box-container">
+    
+    <div class="box">
+      <div class="image">
+        <img src="../images/index/venues.jpg">
+      </div>
+      <div class="content">
+        <h3>Venues</h3>
+        <div class="icons"></div>
+        <button onclick="window.location.href='venues.php';" class="btn">Go to page</button>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="image">
+        <img src="../images/index/bukit_jalil.jpg">
+      </div>
+      <div class="content">
+        <h3>Reserve A Venue</h3>
+        <div class="icons"></div>
+        <button onclick="window.location.href='reserve_1.php';" class="btn">Go to page</button>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="image">
+        <img src="../images/index/pending_reservations.jpg">
+      </div>
+      <div class="content">
+        <h3>Pending Reservations</h3>
+        <div class="icons"></div>
+        <button onclick="window.location.href='pending_reserve.php';" class="btn">Go to page</button>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="image">
+        <img src="../images/index/reservation_history.jpg">
+      </div>
+      <div class="content">
+        <h3>Reservation History</h3>
+        <div class="icons"></div>
+        <button onclick="window.location.href='history_reserve.php';" class="btn">Go to page</button>
+      </div>
+    </div>
+
+  </div>
 </div>
+
 
 </body>
 </html>

@@ -23,6 +23,8 @@ if(isset($_POST['update_profile']))
 
    	mysqli_query($conn, "update company set client_name='$client_name', dob='$dob', address='$address', contact_no='$contact_no', email='$email', company_name='$company_name', company_address='$company_address', company_contact_no='$company_contact_no', company_email='$company_email', position='$position' where email='$session_id'");
 
+    $_SESSION['session_id'] = $email;
+
    	$old_pass = $_POST['old_pass'];
    	$update_pass = mysqli_real_escape_string($conn, $_POST['update_pass']);
    	$new_pass = mysqli_real_escape_string($conn, $_POST['new_pass']);
@@ -68,6 +70,7 @@ if(isset($_POST['update_profile']))
    			}
    		}
    	}
+    $message[] = 'Updated!';
    	$_SESSION['message'] = $message;
 
    	header('location: profile.php');
@@ -185,10 +188,11 @@ if (isset($_POST['payment']))
 
 if (isset($_POST['rate'])) 
 {
+    $evt_reservation_id = $_POST['evt_reservation_id'];
     $rating = $_POST['rating'];
     $feedback = $_POST['feedback'];
 
-    mysqli_query($conn, "update event_reservation set payment_id = (select max(payment_id) from payment) where evt_reservation_id = '$evt_reservation_id'");
+    mysqli_query($conn, "update event_reservation set rating='$rating', feedback='$feedback' where evt_reservation_id = '$evt_reservation_id'");
 
     header('Location: history_reserve.php');
 }
