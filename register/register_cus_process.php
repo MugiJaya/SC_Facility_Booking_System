@@ -74,9 +74,9 @@ if (isset($_POST['reg_user']))
     {
         $password = ($password_1);
 	
-        $query = "insert into customer (customer_name, dob, gender, address, contact_no, email, password, profile_picture, verification_status) VALUES ('$customer_name','$dob', '$gender', '$address', '$contact_no', '$email', '$password', '$file', 'Declined')";
+        $query = "insert into customer (customer_name, dob, gender, address, contact_no, email, password, profile_picture, verification_status) VALUES ('$customer_name','$dob', '$gender', '$address', '$contact_no', '$email', '$password', '$file', 'Pending')";
         mysqli_query($conn, $query);
-        header("Location: ../login/login.php");
+        echo "<script>alert('Account has been created!\\nPlease wait for the admin\'s approval!'); window.location.href = '../login/login.php';</script>";
 	}
 }
 

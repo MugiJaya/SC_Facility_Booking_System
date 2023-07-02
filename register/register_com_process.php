@@ -100,9 +100,9 @@ if (isset($_POST['reg_user']))
     {
         $password = ($password_1);
 	
-        $query = "insert into company (client_name, dob, gender, address, contact_no, email, password, profile_picture, company_name, company_address, company_contact_no, company_email, position, verification_status) VALUES ('$client_name','$dob', '$gender', '$address', '$contact_no', '$email', '$password', '$file', '$company_name', '$company_address', '$company_contact_no', '$company_email', '$position', 'Declined')";
+        $query = "insert into company (client_name, dob, gender, address, contact_no, email, password, profile_picture, company_name, company_address, company_contact_no, company_email, position, verification_status) VALUES ('$client_name','$dob', '$gender', '$address', '$contact_no', '$email', '$password', '$file', '$company_name', '$company_address', '$company_contact_no', '$company_email', '$position', 'Pending')";
         mysqli_query($conn, $query);
-        header("Location: ../login/login.php");
+        echo "<script>alert('Account has been created!\\nPlease wait for the admin\'s approval!'); window.location.href = '../login/login.php';</script>";
 	}
 }
 
