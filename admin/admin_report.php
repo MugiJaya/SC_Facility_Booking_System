@@ -4,33 +4,13 @@ if(!isset($_SESSION['session_id']))
 {
   header("location: ../login/login.php"); 
 }
-//fetch the record to update 
-if (isset($_GET['edit'])) {
-    $customer_id = $_GET['edit'];
-    $update = true;
-    $record = mysqli_query($conn, "select * from customer where customer_id = $customer_id");
-    if (count($record) == 1 ) 
-    {
-      $n = mysqli_fetch_array($record);
-
-      $customer_name = $n['customer_name'];
-      $dob = $n['dob'];
-      $gender = $n['gender'];
-      $address = $n['address'];
-      $contact_no = $n['contact_no'];
-      $email = $n['email'];
-      $password = $n['password'];
-      $verification_status = $n['verification_status'];
-      $admin_id = $n['admin_id'];
-    }
-  }
 ?>
 
 
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin / Report</title>
+  <title>Admin / Company</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="admin_css_1.css">
@@ -47,23 +27,29 @@ if (isset($_GET['edit'])) {
       position: fixed;
       left: 0;
       right: 0;
-      height: 30%;    
+      height: 100%;    
       top: 0;
       margin-left: 150px;
       background-color: lavender;
       overflow-y: auto;
     }
-  
-    .bottom {
-      position: fixed;
-      left: 0;
-      right: 0;
-      height: 70%;
-      bottom: 0;
-      margin-left: 150px;
-      background-color: lavender;
-      overflow-x: auto;
-      border: solid #2E2525;
+
+    #venue_chart {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    #customer_chart {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    #company_chart {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
   </style>
@@ -138,177 +124,216 @@ if (isset($_GET['edit'])) {
 
 <div class="top">
 
-<?php if (isset($_SESSION['msg'])): ?>
-  <div class="msg">
-    <?php 
-      echo $_SESSION['msg']; 
-      unset($_SESSION['msg']);
-    ?>
-  </div>
-<?php endif ?>
+<h1 style="text-align: center;">Venue Report:</h1>
+<canvas id="venue_chart"></canvas>
 
+<h1 style="text-align: center;">Customer Report:</h1>
+<canvas id="customer_chart"></canvas>
 
-<div class="input-group">
-<table id="table1">
-
-  <form method="post" action="admin_process.php" enctype="multipart/form-data">
-    <tr>
-      <td>
-        <label>Customer ID:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="customer_id" value="<?php echo $customer_id; ?>" readonly>
-      </td>
-      <td>
-        <label>Customer Name:</label><br>
-        <input class="input2" type="text" name="customer_name" value="<?php echo $customer_name; ?>">
-      </td>     
-      <td>
-        <label>Date of Birth:</label><br>
-        <input class="input2" type="date" name="dob" value="<?php echo $dob; ?>">
-      </td> 
-      <td>
-        <label>Gender:</label><br>
-        <select class="input2" name="gender"> 
-          <option value="<?php echo $gender;?>" hidden><?php echo $gender; ?></option>
-          <option value="">--- No Value ---</option>
-          <option value="M">M</option>
-          <option value="F">F</option>
-        </select>
-      </td> 
-    </tr>
-    <tr>
-      <td>
-        <label>Address:</label><br>
-        <input class="input2" type="text" name="address" value="<?php echo $address; ?>">
-      </td> 
-      <td>
-        <label>Contact No.:</label><br>
-        <input class="input2" type="text" name="contact_no" value="<?php echo $contact_no; ?>">
-      </td>  
-      <td>
-        <label>Email:</label><br>
-        <input class="input2" type="text" name="email" value="<?php echo $email; ?>">
-      </td>
-      <td>
-        <label>Password:</label><br>
-        <input class="input2" type="text" name="password" value="<?php echo $password; ?>">
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label>Verification Status:</label><br>
-        <select class="input2" name="verification_status"> 
-          <option value="<?php echo $verification_status;?>" hidden><?php echo $verification_status; ?></option>
-          <option value="">--- No Value ---</option>
-          <option value="Approved">Approved</option>
-          <option value="Pending">Pending</option>
-          <option value="Declined">Declined</option>
-        </select>
-      </td>
-      <td>
-        <label>Admin ID:</label><br>
-        <input style="background-color: #e6e6e6;" class="input2" type="text" name="admin_id" value="<?php echo $admin_id; ?>" readonly>
-      </td>
-    </tr>  
-    <tr>
-      <td colspan="4">
-        <?php if ($update == true): ?>
-        <button class="btn" type="submit" name="update" >Update</button>
-        <?php else: ?>
-        <p></p>
-        <?php endif ?>
-      </td>  
-    </tr>
-  </form>
-
-</table>
-</div>
-<br>
-
+<h1 style="text-align: center;">Company Report:</h1>
+<canvas id="company_chart"></canvas>
 
 <?php
-$query = "select * from customer where verification_status = 'Approved'";
-$search_result = filterTable($query);
+/* ________________________________VENUE_CHART________________________________ */
+$query = "SELECT DISTINCT f.facility_name, COUNT(er.facility_id) + COUNT(b.facility_id) AS combined_rank FROM facility f LEFT JOIN event_reservation er ON f.facility_id = er.facility_id LEFT JOIN booking b ON f.facility_id = b.facility_id GROUP BY f.facility_name ORDER BY combined_rank DESC LIMIT 10";
+$result = mysqli_query($conn, $query);
 
-// function to connect and execute the query
-function filterTable($query)
-{
-    $conn = mysqli_connect("localhost", "root", "", "sports_complex");
-    $filter_Result = mysqli_query($conn, $query);
-    return $filter_Result;
+$facilityNames = array();
+$combinedRanks = array();
+
+while ($row = mysqli_fetch_assoc($result)) {
+  $facilityNames[] = $row['facility_name'];
+  $combinedRanks[] = $row['combined_rank'];
+}
+
+/* ________________________________CUSTOMER_CHART________________________________ */
+$query_2 = "SELECT c.customer_name, COUNT(b.booking_id) AS rank FROM customer c LEFT JOIN booking b ON c.customer_id = b.customer_id GROUP BY c.customer_name ORDER BY rank DESC LIMIT 20";
+$result_2 = mysqli_query($conn, $query_2);
+
+$customerNames = array();
+$customerRanks = array();
+
+while ($row = mysqli_fetch_assoc($result_2)) {
+  $customerNames[] = $row['customer_name'];
+  $customerRanks[] = $row['rank'];
+}
+
+/* ________________________________COMPANY_CHART________________________________ */
+$query_3 = "SELECT CONCAT('Client: ', c.client_name, '<br>Company: ', c.company_name) AS client, COUNT(er.evt_reservation_id) AS rank FROM company c LEFT JOIN event_reservation er ON c.company_id = er.company_id GROUP BY c.client_name ORDER BY rank DESC LIMIT 20";
+$result_3 = mysqli_query($conn, $query_3);
+
+$clientCompanyNames = array();
+$clientRanks = array();
+
+while ($row = mysqli_fetch_assoc($result_3)) {
+  $clientCompanyNames[] = $row['client'];
+  $clientRanks[] = $row['rank'];
 }
 ?>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0"></script>
+<script>
+/* ________________VENUE_CHART________________ */
+function generateRandomVenueColor() {
+  var r = Math.floor(Math.random() * 256);
+  var g = Math.floor(Math.random() * 256);
+  var b = Math.floor(Math.random() * 256);
+  var alpha = 0.2;
 
-<br>
-</div>
-<div class="bottom">
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
 
+var venueBackgroundColors = [];
+var venueBorderColors = [];
 
-<table name="item" id="table2" class="display" width="100%" cellspacing="0">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Profile Picture</th>
-      <th>Customer ID</th>
-      <th>Customer Name</th>
-      <th>DOB</th>
-      <th>Gender</th>
-      <th>Address</th>
-      <th>Contact No.</th>
-      <th>Email</th>
-      <th>Password</th>
-      <th>Verification Status</th>
-      <th>Admin ID</th>
-    </tr>
-  </thead>
-  <tfoot>
-    <tr>
-      <th id='no'>#</th>
-      <th id='no'>Profile Picture</th>
-      <th id='in'>Customer ID</th>
-      <th id='in'>Customer Name</th>
-      <th id='in'>DOB</th>
-      <th id='in'>Gender</th>
-      <th id='in'>Address</th>
-      <th id='in'>Contact No.</th>
-      <th id='in'>Email</th>
-      <th id='in'>Password</th>
-      <th id='in'>Verification Status</th>
-      <th id='in'>Admin ID</th>
-    </tr>
-  </tfoot>
-  <tbody>
-    <?php while($row = mysqli_fetch_array($search_result)):?>    
-    <tr class="breakrow" onclick="location.href='admin_customer.php?edit=<?php echo $row['customer_id']; ?>'">
-      <td>
-        <a title="Edit" href="admin_customer.php?edit=<?php echo $row['customer_id']; ?>" class="edit_btn" >✏️</a>
-      </td>
-      <td><?php echo '<img src="data:image/jpeg;base64,'.base64_encode($row['profile_picture'] ).'" height="150" width="150" class="img-thumnail" />' ?></td>
-      <td><?php echo $row['customer_id'];?></td>
-      <td><?php echo $row['customer_name'];?></td>                  
-      <td><?php echo $row['dob'];?></td>
-      <td><?php echo $row['gender'];?></td>
-      <td><?php echo $row['address'];?></td>
-      <td><?php echo $row['contact_no'];?></td>
-      <td><?php echo $row['email'];?></td>
-      <td><?php echo $row['password'];?></td>
-      <td><?php echo $row['verification_status'];?></td>
-      <td><?php echo $row['admin_id'];?></td>
-    </tr>   
-    <?php endwhile;?>
-  </tbody>
-</table>
+for (var i = 0; i < 10; i++) {
+  var backgroundColor = generateRandomVenueColor();
+  var borderColor = backgroundColor.replace(/[^,]+(?=\))/, '1');
+
+  venueBackgroundColors.push(backgroundColor);
+  venueBorderColors.push(borderColor);
+}
+
+var venueCtx = document.getElementById('venue_chart').getContext('2d');
+var venueChart = new Chart(venueCtx, {
+  type: 'bar',
+  data: {
+    labels: <?php echo json_encode($facilityNames); ?>,
+    datasets: [{
+      label: 'Total Reservations',
+      data: <?php echo json_encode($combinedRanks); ?>,
+      backgroundColor: venueBackgroundColors,
+      borderColor: venueBorderColors,
+      borderWidth: 2
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    },
+    layout: {
+      padding: {
+        left: 50,
+        right: 50,
+        top: 0,
+        bottom: 50
+      }
+    }
+  }
+});
+/* ________________END________________ */
 
 
-<br>
+/* ________________CUSTOMER_CHART________________ */
+function generateRandomCustomerColor() {
+  var r = Math.floor(Math.random() * 256);
+  var g = Math.floor(Math.random() * 256);
+  var b = Math.floor(Math.random() * 256);
+  var alpha = 0.2;
+
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+var customerBackgroundColors = [];
+var customerBorderColors = [];
+
+for (var i = 0; i < 10; i++) {
+  var backgroundColor = generateRandomCustomerColor();
+  var borderColor = backgroundColor.replace(/[^,]+(?=\))/, '1');
+
+  customerBackgroundColors.push(backgroundColor);
+  customerBorderColors.push(borderColor);
+}
+
+var customerCtx = document.getElementById('customer_chart').getContext('2d');
+var customerChart = new Chart(customerCtx, {
+  type: 'bar',
+  data: {
+    labels: <?php echo json_encode($customerNames); ?>,
+    datasets: [{
+      label: 'Total Bookings',
+      data: <?php echo json_encode($customerRanks); ?>,
+      backgroundColor: customerBackgroundColors,
+      borderColor: customerBorderColors,
+      borderWidth: 2
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    },
+    layout: {
+      padding: {
+        left: 50,
+        right: 50,
+        top: 0,
+        bottom: 50
+      }
+    }
+  }
+});
+/* ________________END________________ */
 
 
-<link rel = "stylesheet" type = "text/css" href = "https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+/* ________________COMPANY_CHART________________ */
+function generateRandomCompanyColor() {
+  var r = Math.floor(Math.random() * 256);
+  var g = Math.floor(Math.random() * 256);
+  var b = Math.floor(Math.random() * 256);
+  var alpha = 0.2;
+
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+var companyBackgroundColors = [];
+var companyBorderColors = [];
+
+for (var i = 0; i < 10; i++) {
+  var backgroundColor = generateRandomCompanyColor();
+  var borderColor = backgroundColor.replace(/[^,]+(?=\))/, '1');
+
+  companyBackgroundColors.push(backgroundColor);
+  companyBorderColors.push(borderColor);
+}
+
+var companyCtx = document.getElementById('company_chart').getContext('2d');
+var companyChart = new Chart(companyCtx, {
+  type: 'bar',
+  data: {
+    labels: <?php echo json_encode($clientCompanyNames); ?>,
+    datasets: [{
+      label: 'Total Reservations',
+      data: <?php echo json_encode($clientRanks); ?>,
+      backgroundColor: companyBackgroundColors,
+      borderColor: companyBorderColors,
+      borderWidth: 2
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    },
+    layout: {
+      padding: {
+        left: 50,
+        right: 50,
+        top: 0,
+        bottom: 50
+      }
+    }
+  }
+});
+/* ________________END________________ */
+</script>
+
+
 <script type="text/javascript">
-
-
 /* ____SIDENAV____ */
 var dropdown = document.getElementsByClassName("dropdown-btn");
 var i;
@@ -324,53 +349,8 @@ for (i = 0; i < dropdown.length; i++) {
   }
   });
 }
-
-
-/* ____TABLE____ */
-$(document).ready(function() {
-    $('#table2').DataTable( {
-        initComplete: function () {
-            this.api().columns().every( function () {
-                var column = this;
-                var select = $('<select style="font-size:10px; height:15px; min-width:50px;"><option value=""></option></select>')
-                    .appendTo( $(column.footer()).empty() )
-                    .on( 'change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
- 
-                        column
-                            .search( val ? '^'+val+'$' : '', true, false )
-                            .draw();
-                    } );
- 
-                column.data().unique().sort().each( function ( d, j ) {
-                    select.append( '<option style="font-size:10px;" value="'+d+'">'+d+'</option>' )
-                } );
-            } );
-        }
-        });
-    var table =  $('#table2').DataTable();
-    $('#table2 tfoot #in').each(function () {
-        var title = $('#table2 thead th').eq($(this).index()).text();
-        $(this).html('<input type="text">');
-    });
-    var table =  $('#table2').DataTable();
-    $('#table2 tfoot #no').each(function () {
-        var title = $('#table2 thead th').eq($(this).index()).text();
-        $(this).html('<input type="text" style="visibility: hidden;">');
-    });
-    table.columns().eq(0).each(function (colIdx) {
-        $('input', table.column(colIdx).footer()).on('keyup change', function () {
-            table.column(colIdx)
-                .search(this.value)
-                .draw();
-        });
-    });
-} );
-
-
 </script>
+
 
 </div>
 
