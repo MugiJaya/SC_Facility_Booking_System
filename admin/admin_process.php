@@ -234,8 +234,6 @@ if (isset($_POST['update5']))
     $reservation_end_time = $_POST['reservation_end_time'];
     $reservation_purpose = $_POST['reservation_purpose'];
     $approval_status = $_POST['approval_status'];
-    $rating = $_POST['rating'];
-    $feedback = $_POST['feedback'];
     $customer_id = $_POST['customer_id'];
     $customer_name = $_POST['customer_name'];
     $facility_id = $_POST['facility_id'];
@@ -244,7 +242,7 @@ if (isset($_POST['update5']))
     $payment_amount = $_POST['payment_amount'];
     $payment_time = $_POST['payment_time'];
 	
-	mysqli_query($conn, "update booking set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', approval_status='$approval_status', rating='$rating', feedback='$feedback' where booking_id=$booking_id");
+	mysqli_query($conn, "update booking set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', approval_status='$approval_status' where booking_id=$booking_id");
 
 	mysqli_query($conn, "update payment set payment_amount='$payment_amount', payment_time='$payment_time' where payment_id=$payment_id");
 
@@ -261,8 +259,6 @@ if (isset($_POST['update6']))
     $reservation_end_time = $_POST['reservation_end_time'];
     $reservation_purpose = $_POST['reservation_purpose'];
     $approval_status = $_POST['approval_status'];
-    $rating = $_POST['rating'];
-    $feedback = $_POST['feedback'];
     $customer_id = $_POST['customer_id'];
     $customer_name = $_POST['customer_name'];
     $facility_id = $_POST['facility_id'];
@@ -288,8 +284,6 @@ if (isset($_POST['update7']))
     $event_type = $_POST['event_type'];
     $request = $_POST['request'];
     $approval_status = $_POST['approval_status'];
-    $rating = $_POST['rating'];
-    $feedback = $_POST['feedback'];
     $company_id = $_POST['company_id'];
     $company_name = $_POST['company_name'];
     $client_name = $_POST['client_name'];
@@ -299,7 +293,7 @@ if (isset($_POST['update7']))
     $payment_amount = $_POST['payment_amount'];
     $payment_time = $_POST['payment_time'];
 	
-	mysqli_query($conn, "update event_reservation set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', event_type='$event_type', request='$request', approval_status='$approval_status', rating='$rating', feedback='$feedback' where evt_reservation_id=$evt_reservation_id");
+	mysqli_query($conn, "update event_reservation set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', event_type='$event_type', request='$request', approval_status='$approval_status' where evt_reservation_id=$evt_reservation_id");
 
 	mysqli_query($conn, "update payment set payment_amount='$payment_amount', payment_time='$payment_time' where payment_id=$payment_id");
 
@@ -318,8 +312,6 @@ if (isset($_POST['update8']))
     $event_type = $_POST['event_type'];
     $request = $_POST['request'];
     $approval_status = $_POST['approval_status'];
-    $rating = $_POST['rating'];
-    $feedback = $_POST['feedback'];
     $company_id = $_POST['company_id'];
     $company_name = $_POST['company_name'];
     $client_name = $_POST['client_name'];
@@ -329,7 +321,7 @@ if (isset($_POST['update8']))
     $payment_amount = $_POST['payment_amount'];
     $payment_time = $_POST['payment_time'];
 	
-	mysqli_query($conn, "update event_reservation set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', event_type='$event_type', request='$request', approval_status='$approval_status', rating='$rating', feedback='$feedback' where evt_reservation_id=$evt_reservation_id");
+	mysqli_query($conn, "update event_reservation set reservation_time='$reservation_time', reservation_start_time='$reservation_start_time', reservation_end_time='$reservation_end_time', reservation_purpose='$reservation_purpose', event_type='$event_type', request='$request', approval_status='$approval_status' where evt_reservation_id=$evt_reservation_id");
 
 	$_SESSION['msg'] = "Updated!"; 
 	header('location: admin_event_approval.php');

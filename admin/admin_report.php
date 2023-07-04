@@ -159,7 +159,7 @@ while ($row = mysqli_fetch_assoc($result_2)) {
 }
 
 /* ________________________________COMPANY_CHART________________________________ */
-$query_3 = "SELECT CONCAT('Client: ', c.client_name, '<br>Company: ', c.company_name) AS client, COUNT(er.evt_reservation_id) AS rank FROM company c LEFT JOIN event_reservation er ON c.company_id = er.company_id GROUP BY c.client_name ORDER BY rank DESC LIMIT 20";
+$query_3 = "SELECT CONCAT('Client: ', c.client_name, ' / Company: ', c.company_name) AS client, COUNT(er.evt_reservation_id) AS rank FROM company c LEFT JOIN event_reservation er ON c.company_id = er.company_id GROUP BY c.client_name ORDER BY rank DESC LIMIT 20";
 $result_3 = mysqli_query($conn, $query_3);
 
 $clientCompanyNames = array();
